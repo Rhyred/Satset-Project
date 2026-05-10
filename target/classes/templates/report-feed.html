@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+<head>
+    <title>SatSet - Laporan & Feed</title>
+</head>
+<body>
+<div layout:fragment="content" class="space-y-6">
+    <header class="flex justify-between items-end">
+        <div class="space-y-1">
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900">Laporan & Feed</h1>
+            <p class="text-sm text-gray-500">Pantau aduan Anda dan informasi terkini dari warga Kota.</p>
+        </div>
+    </header>
+
+    <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <a href="#" class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                Laporan Saya
+            </a>
+            <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                Community Feed
+            </a>
+        </nav>
+    </div>
+
+    <div class="space-y-4">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="font-medium text-gray-900">Daftar Pengaduan</h2>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-3 rounded-md flex items-center transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+                Buat Laporan
+            </button>
+        </div>
+
+        <div class="text-center py-10 bg-white rounded-xl border border-dashed border-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-gray-400 mb-2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+            <p class="text-gray-500 text-sm">Belum ada laporan yang diajukan.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

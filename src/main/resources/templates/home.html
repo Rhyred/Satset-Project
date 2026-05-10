@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+<head>
+    <title>SatSet - Home</title>
+</head>
+<body>
+<div layout:fragment="content" class="space-y-6">
+    <header class="space-y-1">
+        <h1 class="text-2xl font-bold tracking-tight text-gray-900">Halo, Warga! 👋</h1>
+        <p class="text-sm text-gray-500">Selamat datang di SatSet. Ada yang bisa kami bantu hari ini?</p>
+    </header>
+
+    <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-xl p-6 shadow-md">
+        <h2 class="text-xl font-bold mb-2">Sistem Antrian Birokrasi</h2>
+        <p class="text-blue-100 mb-4 text-sm max-w-md">Ambil nomor antrian secara online tanpa harus menunggu lama di kantor dinas.</p>
+        <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg shadow-sm flex items-center text-sm transition" onclick="alert('Fitur Antrian Terintegrasi dengan Backend')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" x2="12" y1="18" y2="12"/><line x1="9" x2="15" y1="15" y2="15"/></svg>
+            Ambil Antrian Sekarang
+        </button>
+    </div>
+
+    <section class="space-y-4">
+        <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold tracking-tight text-gray-900 bg-white">Antrian Saya</h2>
+        </div>
+        <div class="text-center py-10 bg-white rounded-xl border border-dashed border-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-gray-400 mb-2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <p class="text-gray-500 text-sm">Belum ada antrian aktif.</p>
+        </div>
+    </section>
+</div>
+</body>
+</html>
