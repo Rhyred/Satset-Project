@@ -9,8 +9,8 @@
         <version>3.2.5</version>
         <relativePath/> </parent>
     
-    <groupId>com.kelompok4</groupId>
-    <artifactId>satset</artifactId>
+    <groupId>com.kelompok4.satset</groupId>
+    <artifactId>app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SatSet</name>
     <description>Sistem Administrasi Terpadu &amp; Sentralisasi Elektronik</description>
