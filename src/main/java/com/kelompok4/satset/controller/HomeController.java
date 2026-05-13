@@ -1,11 +1,19 @@
 package com.kelompok4.satset.controller;
 
+import com.kelompok4.satset.service.ContactMessageService;
+import com.kelompok4.satset.service.FeatureService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
+    
+    private final FeatureService featureService;
+    private final ContactMessageService contactMessageService;
 
     @GetMapping("/")
     @ResponseBody
@@ -260,6 +268,112 @@ public class HomeController {
                             padding: 20px;
                         }
                     }
+
+                    .contact-form {
+                        background: #fff;
+                        border-radius: 12px;
+                        padding: 40px;
+                        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+                        margin-bottom: 60px;
+                        max-width: 600px;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+
+                    .contact-form h2 {
+                        font-size: 32px;
+                        color: #1e40af;
+                        margin-bottom: 30px;
+                        text-align: center;
+                    }
+
+                    .form-group {
+                        margin-bottom: 20px;
+                    }
+
+                    .form-group label {
+                        display: block;
+                        font-weight: 500;
+                        color: #333;
+                        margin-bottom: 8px;
+                        font-size: 14px;
+                    }
+
+                    .form-group input,
+                    .form-group textarea {
+                        width: 100%;
+                        padding: 12px;
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        font-family: inherit;
+                        font-size: 14px;
+                        transition: border-color 0.3s ease;
+                    }
+
+                    .form-group input:focus,
+                    .form-group textarea:focus {
+                        outline: none;
+                        border-color: #1e40af;
+                        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+                    }
+
+                    .form-group textarea {
+                        resize: vertical;
+                        min-height: 150px;
+                    }
+
+                    .btn {
+                        background: #1e40af;
+                        color: white;
+                        padding: 12px 30px;
+                        border: none;
+                        border-radius: 6px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: background 0.3s ease;
+                        width: 100%;
+                    }
+
+                    .btn:hover {
+                        background: #1e3a8a;
+                    }
+
+                    .btn:disabled {
+                        background: #ccc;
+                        cursor: not-allowed;
+                    }
+
+                    .alert {
+                        padding: 15px;
+                        border-radius: 6px;
+                        margin-bottom: 20px;
+                        display: none;
+                    }
+
+                    .alert.success {
+                        background: #d1fae5;
+                        color: #065f46;
+                        border: 1px solid #6ee7b7;
+                        display: block;
+                    }
+
+                    .alert.error {
+                        background: #fee2e2;
+                        color: #991b1b;
+                        border: 1px solid #fca5a5;
+                        display: block;
+                    }
+
+                    .loading {
+                        display: inline-block;
+                        width: 14px;
+                        height: 14px;
+                        border: 2px solid #f3f4f6;
+                        border-top: 2px solid #1e40af;
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                    }
                 </style>
             </head>
             <body>
@@ -312,32 +426,33 @@ public class HomeController {
 
                     <div class="features" id="features">
                         <h2>Features & Capabilities</h2>
-                        <div class="features-list">
-                            <div class="feature-item">
-                                <h3>REST API</h3>
-                                <p>Fully functional REST API with clean endpoints and proper status codes.</p>
-                            </div>
-                            <div class="feature-item">
-                                <h3>Database Integration</h3>
-                                <p>PostgreSQL integration with Hibernate ORM for data persistence.</p>
-                            </div>
-                            <div class="feature-item">
-                                <h3>Responsive Design</h3>
-                                <p>Mobile-friendly interface that works on all device sizes.</p>
-                            </div>
-                            <div class="feature-item">
-                                <h3>Security Ready</h3>
-                                <p>Spring Security configuration ready for authentication and authorization.</p>
-                            </div>
-                            <div class="feature-item">
-                                <h3>Testing Framework</h3>
-                                <p>JUnit 5 and Spring Boot Test integrated for quality assurance.</p>
-                            </div>
-                            <div class="feature-item">
-                                <h3>Auto-Reload</h3>
-                                <p>Spring DevTools enabled for rapid development cycles.</p>
-                            </div>
+                        <div class="features-list" id="features-list">
+                            <div style="text-align: center; color: #999;">Loading features...</div>
                         </div>
+                    </div>
+
+                    <div class="contact-form" id="contact">
+                        <h2>Get in Touch</h2>
+                        <div id="message-alert" class="alert"></div>
+                        <form id="contact-form">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn" id="submit-btn">Send Message</button>
+                        </form>
                     </div>
 
                     <div class="features" id="about">
@@ -350,18 +465,107 @@ public class HomeController {
                     </div>
                 </main>
 
-                <footer id="contact">
+                <footer>
                     <p>&copy; 2026 SATSET - Kelompok 4. Built with ❤️ using Spring Boot</p>
                     <p style="margin-top: 10px; font-size: 12px; color: #999;">
                         Contact: satset.team@example.com | Version 1.0.0
                     </p>
                 </footer>
 
-                    </div>
-                    <div class="rainbow-bar"></div>
-                </div>
+                <script>
+                    // Load features from API
+                    async function loadFeatures() {
+                        try {
+                            const response = await fetch('/api/features/active');
+                            if (!response.ok) throw new Error('Failed to load features');
+                            const features = await response.json();
+                            
+                            const container = document.getElementById('features-list');
+                            if (features.length === 0) {
+                                container.innerHTML = '<div style="text-align: center; color: #999;">No features available</div>';
+                                return;
+                            }
+                            
+                            container.innerHTML = features.map(feature => `
+                                <div class="feature-item">
+                                    <h3>${feature.title}</h3>
+                                    <p>${feature.description}</p>
+                                </div>
+                            `).join('');
+                        } catch (error) {
+                            console.error('Error loading features:', error);
+                            document.getElementById('features-list').innerHTML = '<div style="text-align: center; color: #999;">Failed to load features</div>';
+                        }
+                    }
+
+                    // Handle contact form submission
+                    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        
+                        const submitBtn = document.getElementById('submit-btn');
+                        const alertDiv = document.getElementById('message-alert');
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<span class="loading"></span> Sending...';
+                        
+                        try {
+                            const formData = {
+                                name: document.getElementById('name').value,
+                                email: document.getElementById('email').value,
+                                subject: document.getElementById('subject').value,
+                                message: document.getElementById('message').value
+                            };
+                            
+                            const response = await fetch('/api/messages', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(formData)
+                            });
+                            
+                            const result = await response.json();
+                            
+                            if (response.ok && result.success) {
+                                alertDiv.className = 'alert success';
+                                alertDiv.textContent = '✓ ' + result.message;
+                                document.getElementById('contact-form').reset();
+                                
+                                setTimeout(() => {
+                                    alertDiv.className = 'alert';
+                                }, 5000);
+                            } else {
+                                alertDiv.className = 'alert error';
+                                alertDiv.textContent = '✗ ' + (result.message || 'Failed to send message');
+                            }
+                        } catch (error) {
+                            alertDiv.className = 'alert error';
+                            alertDiv.textContent = '✗ Error sending message: ' + error.message;
+                            console.error('Error:', error);
+                        } finally {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = 'Send Message';
+                        }
+                    });
+
+                    // Load features when page loads
+                    document.addEventListener('DOMContentLoaded', loadFeatures);
+
+                    // Smooth scroll for navigation links
+                    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                        anchor.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            const target = document.querySelector(this.getAttribute('href'));
+                            if (target) {
+                                target.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                            }
+                        });
+                    });
+                </script>
             </body>
-            </html>
+        </html>
             """;
     }
 }
