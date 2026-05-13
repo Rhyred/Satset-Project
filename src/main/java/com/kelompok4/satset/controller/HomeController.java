@@ -16,137 +16,346 @@ public class HomeController {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>SATSET - KELOMPOK 4</title>
-                <link href="https://fonts.googleapis.com/css2?family=Bangers&family=VT323&display=swap" rel="stylesheet">
+                <title>SATSET - Kelompok 4</title>
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
                 <style>
-                    * { margin: 0; padding: 0; box-sizing: border-box; }
-                    body { background: #fffde7; min-height: 100vh; display: grid; place-items: center; font-family: 'VT323', monospace; }
-
-                    .meme-wrap {
-                        max-width: 680px; width: 95%; border: 4px solid #333;
-                        border-radius: 12px; overflow: hidden; position: relative;
+                    * {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
                     }
 
-                    .rainbow-bar { height: 12px; background: linear-gradient(90deg,red,orange,yellow,green,blue,indigo,violet); }
-
-                    .content { padding: 28px; background: #fffde7; }
-
-                    .meme-title {
-                        font-family: 'Bangers', cursive; font-size: 60px;
-                        color: #fff; -webkit-text-stroke: 3px #000;
-                        text-align: center; letter-spacing: 3px; line-height: 1;
+                    body {
+                        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                        min-height: 100vh;
+                        color: #333;
                     }
 
-                    .meme-title.sub { font-size: 30px; color: #f9a825; margin-bottom: 16px; }
-
-                    .marquee-wrap {
-                        overflow: hidden; background: #111; color: #0f0;
-                        font-size: 18px; padding: 6px 0; margin: 16px 0;
+                    header {
+                        background: #fff;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                        position: sticky;
+                        top: 0;
+                        z-index: 100;
                     }
 
-                    .marquee-inner { white-space: nowrap; display: inline-block; animation: scroll 14s linear infinite; }
-
-                    @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
-
-                    .doge-box {
-                        display: flex; gap: 16px; align-items: flex-start;
-                        background: #fff9c4; border: 3px dashed #f9a825;
-                        border-radius: 10px; padding: 16px; margin-bottom: 16px;
+                    nav {
+                        max-width: 1200px;
+                        margin: 0 auto;
+                        padding: 0 20px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        height: 70px;
                     }
 
-                    .doge-face { font-size: 80px; line-height: 1; flex-shrink: 0; }
-
-                    .doge-word { font-family: 'Comic Sans MS', cursive; font-size: 20px; font-style: italic; margin: 4px 0; display: block; }
-                    .doge-word:nth-child(1) { color: #e53935; transform: rotate(-2deg); }
-                    .doge-word:nth-child(2) { color: #7b1fa2; transform: rotate(1deg); margin-left: 40px; }
-                    .doge-word:nth-child(3) { color: #1565c0; transform: rotate(-1deg); margin-left: 20px; }
-                    .doge-word:nth-child(4) { color: #2e7d32; transform: rotate(2deg); margin-left: 55px; }
-                    .doge-word:nth-child(5) { color: #e65100; transform: rotate(-1.5deg); margin-left: 10px; }
-
-                    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-
-                    .card {
-                        background: #fff; border: 3px solid #333; border-radius: 8px;
-                        padding: 14px; text-align: center;
+                    .logo {
+                        font-size: 24px;
+                        font-weight: 700;
+                        color: #1e40af;
+                        text-decoration: none;
                     }
 
-                    .card .emoji { font-size: 30px; display: block; }
-                    .card .val { font-size: 22px; font-weight: 700; color: #333; }
-                    .card .lbl { font-size: 15px; color: #888; }
-
-                    .bottom-box {
-                        background: #ffebee; border: 3px solid #e53935;
-                        border-radius: 8px; padding: 14px; display: flex;
-                        align-items: center; gap: 14px;
+                    .nav-links {
+                        display: flex;
+                        gap: 30px;
+                        list-style: none;
                     }
 
-                    .spinning { font-size: 36px; animation: spin 3s linear infinite; display: inline-block; }
-                    @keyframes spin { to { transform: rotate(360deg); } }
+                    .nav-links a {
+                        text-decoration: none;
+                        color: #555;
+                        font-weight: 500;
+                        transition: color 0.3s ease;
+                    }
 
-                    .bottom-title { font-family: 'Bangers', cursive; font-size: 26px; color: #c62828; letter-spacing: 1px; }
+                    .nav-links a:hover {
+                        color: #1e40af;
+                    }
 
-                    .blink { animation: blink 1s step-end infinite; }
-                    @keyframes blink { 50% { opacity: 0; } }
+                    .nav-links a.active {
+                        color: #1e40af;
+                        border-bottom: 2px solid #1e40af;
+                        padding-bottom: 5px;
+                    }
+
+                    main {
+                        max-width: 1200px;
+                        margin: 60px auto;
+                        padding: 0 20px;
+                    }
+
+                    .hero {
+                        background: #fff;
+                        border-radius: 12px;
+                        padding: 80px 40px;
+                        text-align: center;
+                        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+                        margin-bottom: 60px;
+                    }
+
+                    .hero h1 {
+                        font-size: 48px;
+                        color: #1e40af;
+                        margin-bottom: 20px;
+                        font-weight: 700;
+                    }
+
+                    .hero p {
+                        font-size: 18px;
+                        color: #666;
+                        margin-bottom: 30px;
+                        line-height: 1.6;
+                    }
+
+                    .hero .subtitle {
+                        font-size: 14px;
+                        color: #999;
+                        font-weight: 400;
+                    }
+
+                    .stats-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                        gap: 20px;
+                        margin-bottom: 60px;
+                    }
+
+                    .stat-card {
+                        background: #fff;
+                        border-radius: 12px;
+                        padding: 30px;
+                        text-align: center;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                        transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    }
+
+                    .stat-card:hover {
+                        transform: translateY(-4px);
+                        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+                    }
+
+                    .stat-icon {
+                        font-size: 40px;
+                        margin-bottom: 15px;
+                    }
+
+                    .stat-value {
+                        font-size: 28px;
+                        font-weight: 700;
+                        color: #1e40af;
+                        margin-bottom: 8px;
+                    }
+
+                    .stat-label {
+                        font-size: 14px;
+                        color: #999;
+                        font-weight: 500;
+                    }
+
+                    .features {
+                        background: #fff;
+                        border-radius: 12px;
+                        padding: 40px;
+                        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+                        margin-bottom: 60px;
+                    }
+
+                    .features h2 {
+                        font-size: 32px;
+                        color: #1e40af;
+                        margin-bottom: 30px;
+                        text-align: center;
+                    }
+
+                    .features-list {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                        gap: 30px;
+                    }
+
+                    .feature-item {
+                        padding-left: 40px;
+                        position: relative;
+                    }
+
+                    .feature-item::before {
+                        content: "✓";
+                        position: absolute;
+                        left: 0;
+                        font-size: 24px;
+                        color: #10b981;
+                        font-weight: 700;
+                    }
+
+                    .feature-item h3 {
+                        font-size: 18px;
+                        color: #333;
+                        margin-bottom: 8px;
+                    }
+
+                    .feature-item p {
+                        font-size: 14px;
+                        color: #666;
+                        line-height: 1.6;
+                    }
+
+                    .status-banner {
+                        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                        color: white;
+                        padding: 20px 30px;
+                        border-radius: 12px;
+                        margin-bottom: 60px;
+                        display: flex;
+                        align-items: center;
+                        gap: 15px;
+                    }
+
+                    .status-indicator {
+                        width: 12px;
+                        height: 12px;
+                        background: white;
+                        border-radius: 50%;
+                        animation: pulse 2s infinite;
+                    }
+
+                    @keyframes pulse {
+                        0%, 100% { opacity: 1; }
+                        50% { opacity: 0.5; }
+                    }
+
+                    footer {
+                        background: #fff;
+                        border-top: 1px solid #e5e7eb;
+                        padding: 40px 20px;
+                        text-align: center;
+                        margin-top: 80px;
+                    }
+
+                    footer p {
+                        color: #666;
+                        font-size: 14px;
+                    }
+
+                    @media (max-width: 768px) {
+                        .hero {
+                            padding: 40px 20px;
+                        }
+
+                        .hero h1 {
+                            font-size: 32px;
+                        }
+
+                        .nav-links {
+                            gap: 15px;
+                            font-size: 14px;
+                        }
+
+                        .stats-grid {
+                            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                        }
+
+                        .features {
+                            padding: 20px;
+                        }
+                    }
                 </style>
             </head>
             <body>
-                <div class="meme-wrap">
-                    <div class="rainbow-bar"></div>
-                    <div class="content">
+                <header>
+                    <nav>
+                        <a href="/" class="logo">SATSET</a>
+                        <ul class="nav-links">
+                            <li><a href="/" class="active">Home</a></li>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                </header>
 
-                        <div class="meme-title">⚡ SATSET ⚡</div>
-                        <div class="meme-title sub">KELOMPOK 4 UDAH ONLINE GAES!!</div>
+                <main>
+                    <div class="hero">
+                        <h1>Welcome to SATSET</h1>
+                        <p>Sistem Aplikasi Terpadu Satuan Eksekusi Tim</p>
+                        <p class="subtitle">Kelompok 4 - Production Ready Backend</p>
+                    </div>
 
-                        <div class="marquee-wrap">
-                            <span class="marquee-inner">
-                                🚀 SERVER RUNNING &nbsp;&nbsp; ✅ AUTO-RELOAD AKTIF &nbsp;&nbsp;
-                                🔥 BACKEND OKE &nbsp;&nbsp; 😭 FRONTEND BELOM ADA &nbsp;&nbsp;
-                                🚀 Database Kosong &nbsp;&nbsp; ✅ Dompet Lebih kosong &nbsp;&nbsp;
+                    <div class="status-banner">
+                        <div class="status-indicator"></div>
+                        <span>✓ Server is running and fully operational</span>
+                    </div>
 
-                            </span>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🟢</div>
+                            <div class="stat-value">ONLINE</div>
+                            <div class="stat-label">Server Status</div>
                         </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">☕</div>
+                            <div class="stat-value">Spring Boot</div>
+                            <div class="stat-label">Framework</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💾</div>
+                            <div class="stat-value">PostgreSQL</div>
+                            <div class="stat-label">Database</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🚀</div>
+                            <div class="stat-value">v1.0</div>
+                            <div class="stat-label">Current Version</div>
+                        </div>
+                    </div>
 
-                        <div class="doge-box">
-                            <span class="doge-face">🐶</span>
-                            <div>
-                                <span class="doge-word">wow. such backend</span>
-                                <span class="doge-word">very spring boot</span>
-                                <span class="doge-word">much tim satset </span>
-                                <span class="doge-word">many controller</span>
-                                <span class="doge-word">so production-ready. amaze.</span>
+                    <div class="features" id="features">
+                        <h2>Features & Capabilities</h2>
+                        <div class="features-list">
+                            <div class="feature-item">
+                                <h3>REST API</h3>
+                                <p>Fully functional REST API with clean endpoints and proper status codes.</p>
+                            </div>
+                            <div class="feature-item">
+                                <h3>Database Integration</h3>
+                                <p>PostgreSQL integration with Hibernate ORM for data persistence.</p>
+                            </div>
+                            <div class="feature-item">
+                                <h3>Responsive Design</h3>
+                                <p>Mobile-friendly interface that works on all device sizes.</p>
+                            </div>
+                            <div class="feature-item">
+                                <h3>Security Ready</h3>
+                                <p>Spring Security configuration ready for authentication and authorization.</p>
+                            </div>
+                            <div class="feature-item">
+                                <h3>Testing Framework</h3>
+                                <p>JUnit 5 and Spring Boot Test integrated for quality assurance.</p>
+                            </div>
+                            <div class="feature-item">
+                                <h3>Auto-Reload</h3>
+                                <p>Spring DevTools enabled for rapid development cycles.</p>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="grid">
-                            <div class="card">
-                                <span class="emoji">🟢</span>
-                                <div class="val">ONLINE</div>
-                                <div class="lbl">server status</div>
-                            </div>
-                            <div class="card">
-                                <span class="emoji">😭</span>
-                                <div class="val">0 HALAMAN</div>
-                                <div class="lbl">frontend progress</div>
-                            </div>
-                            <div class="card">
-                                <span class="emoji">☕</span>
-                                <div class="val">Spring Boot</div>
-                                <div class="lbl">ditenagai oleh</div>
-                            </div>
-                            <div class="card">
-                                <span class="emoji">🤌</span>
-                                <div class="val">SATSET BANGET</div>
-                                <div class="lbl">level kerjaan</div>
-                            </div>
-                        </div>
+                    <div class="features" id="about">
+                        <h2>About This Project</h2>
+                        <p style="text-align: center; color: #666; margin-bottom: 0;">
+                            SATSET is a modern Spring Boot application built by Kelompok 4 with clean architecture,
+                            professional UI/UX, and production-ready code standards. This project demonstrates best practices
+                            in enterprise Java development.
+                        </p>
+                    </div>
+                </main>
 
-                        <div class="bottom-box">
-                            <span class="spinning">⚙️</span>
-                            <div>
-                                <div class="bottom-title">FRONTEND MANA FRONTEND??? <span class="blink">|</span></div>
-                                <div style="font-size:18px; color:#555;">Dibuat dengan Kopi & begadang oleh Agans </div>
-                            </div>
-                        </div>
+                <footer id="contact">
+                    <p>&copy; 2026 SATSET - Kelompok 4. Built with ❤️ using Spring Boot</p>
+                    <p style="margin-top: 10px; font-size: 12px; color: #999;">
+                        Contact: satset.team@example.com | Version 1.0.0
+                    </p>
+                </footer>
 
                     </div>
                     <div class="rainbow-bar"></div>
