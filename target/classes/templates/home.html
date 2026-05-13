@@ -1,33 +1,91 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SatSet - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div layout:fragment="content" class="space-y-6">
-    <header class="space-y-1">
-        <h1 class="text-2xl font-bold tracking-tight text-gray-900">Halo, Warga! 👋</h1>
-        <p class="text-sm text-gray-500">Selamat datang di SatSet. Ada yang bisa kami bantu hari ini?</p>
+<body class="bg-slate-50 text-slate-800">
+<div class="min-h-screen">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div>
+                <p class="text-xs uppercase tracking-wider text-blue-600 font-semibold">SatSet SuperApp</p>
+                <h1 class="text-xl md:text-2xl font-bold">Pelayanan Publik Cepat & Terpadu</h1>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-sm">
+                <a href="/" class="px-3 py-2 rounded-md bg-blue-600 text-white font-medium">Home</a>
+                <a href="/reports" class="px-3 py-2 rounded-md border border-slate-300 bg-white hover:bg-slate-100">Laporan & Feed</a>
+                <a href="/account" class="px-3 py-2 rounded-md border border-slate-300 bg-white hover:bg-slate-100">Akun</a>
+            </nav>
+        </div>
     </header>
 
-    <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-xl p-6 shadow-md">
-        <h2 class="text-xl font-bold mb-2">Sistem Antrian Birokrasi</h2>
-        <p class="text-blue-100 mb-4 text-sm max-w-md">Ambil nomor antrian secara online tanpa harus menunggu lama di kantor dinas.</p>
-        <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg shadow-sm flex items-center text-sm transition" onclick="alert('Fitur Antrian Terintegrasi dengan Backend')">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" x2="12" y1="18" y2="12"/><line x1="9" x2="15" y1="15" y2="15"/></svg>
-            Ambil Antrian Sekarang
-        </button>
-    </div>
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+        <section class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white rounded-2xl p-6 md:p-8 shadow-md">
+            <p class="text-blue-100 text-sm mb-2">Halo Warga 👋</p>
+            <h2 class="text-2xl md:text-3xl font-bold mb-3">Semua urusan administrasi, sat-set dari satu aplikasi.</h2>
+            <p class="text-blue-100 max-w-2xl mb-5 text-sm md:text-base">
+                Ajukan antrian birokrasi, kirim pengaduan fasilitas umum, dan pantau tindak lanjut secara real-time.
+            </p>
+            <div class="flex flex-wrap gap-3">
+                <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition"
+                        onclick="alert('Fitur antrian akan dihubungkan ke backend pada fase berikutnya.')">
+                    Ambil Antrian Sekarang
+                </button>
+                <a href="/reports" class="bg-white/15 hover:bg-white/25 text-white border border-white/40 font-semibold py-2.5 px-4 rounded-lg text-sm transition">
+                    Buat Laporan Warga
+                </a>
+            </div>
+        </section>
 
-    <section class="space-y-4">
-        <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold tracking-tight text-gray-900 bg-white">Antrian Saya</h2>
-        </div>
-        <div class="text-center py-10 bg-white rounded-xl border border-dashed border-gray-300">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-gray-400 mb-2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-            <p class="text-gray-500 text-sm">Belum ada antrian aktif.</p>
-        </div>
-    </section>
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <article class="bg-white rounded-xl border border-slate-200 p-4">
+                <p class="text-sm text-slate-500">Status Sistem</p>
+                <p class="text-2xl font-bold text-emerald-600 mt-1">Online</p>
+            </article>
+            <article class="bg-white rounded-xl border border-slate-200 p-4">
+                <p class="text-sm text-slate-500">Antrian Aktif</p>
+                <p class="text-2xl font-bold mt-1">0</p>
+            </article>
+            <article class="bg-white rounded-xl border border-slate-200 p-4">
+                <p class="text-sm text-slate-500">Laporan Diproses</p>
+                <p class="text-2xl font-bold mt-1">0</p>
+            </article>
+            <article class="bg-white rounded-xl border border-slate-200 p-4">
+                <p class="text-sm text-slate-500">Layanan Tersedia</p>
+                <p class="text-2xl font-bold mt-1">2 Modul</p>
+            </article>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <article class="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-5">
+                <h3 class="text-lg font-semibold mb-3">Quick Action</h3>
+                <div class="grid sm:grid-cols-2 gap-3">
+                    <button class="text-left p-4 rounded-lg border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition"
+                            onclick="alert('Fitur pengajuan surat menyusul integrasi API.')">
+                        <p class="font-semibold">Pengajuan Surat</p>
+                        <p class="text-sm text-slate-500">KTP, KK, domisili, dan administrasi lainnya.</p>
+                    </button>
+                    <button class="text-left p-4 rounded-lg border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition"
+                            onclick="alert('Fitur laporan terhubung pada fase API laporan.')">
+                        <p class="font-semibold">Laporan Pengaduan</p>
+                        <p class="text-sm text-slate-500">Laporkan jalan rusak, lampu mati, dan fasilitas umum.</p>
+                    </button>
+                </div>
+            </article>
+
+            <article class="bg-white rounded-xl border border-slate-200 p-5">
+                <h3 class="text-lg font-semibold mb-3">Info Cepat</h3>
+                <ul class="space-y-2 text-sm text-slate-600">
+                    <li>• Estimasi antrian akan tampil setelah API aktif.</li>
+                    <li>• Feed komunitas ada di menu Laporan & Feed.</li>
+                    <li>• Profil warga tersedia di halaman Akun.</li>
+                </ul>
+            </article>
+        </section>
+    </main>
 </div>
 </body>
 </html>
