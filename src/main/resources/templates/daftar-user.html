@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Daftar User - Sistem SatSet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#4f46e5', // Warna Indigo khas
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div class="mb-4 md:mb-0">
+                <h2 class="text-2xl font-extrabold text-brand flex items-center gap-2">
+                    <i class="bi bi-people-fill"></i> Daftar Manajemen User
+                </h2>
+                <p class="text-slate-500 text-sm mt-1">Kelola informasi akun pengguna aplikasi Sistem SatSet dengan mudah.</p>
+            </div>
+            <a th:href="@{/users/tambah}" class="inline-flex items-center gap-2 bg-brand hover:bg-indigo-700 text-white font-semibold py-2.5 px-5 rounded-xl shadow-md shadow-indigo-200 transition-all duration-200 active:scale-95">
+                <i class="bi bi-person-plus-fill text-lg"></i> Tambah User
+            </a>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50 text-slate-600 text-xs uppercase font-bold tracking-wider border-b border-slate-200">
+                        <tr>
+                            <th scope="col" class="py-4 px-6">ID</th>
+                            <th scope="col" class="py-4 px-6">NIK</th>
+                            <th scope="col" class="py-4 px-6">Nama Lengkap</th>
+                            <th scope="col" class="py-4 px-6">Username</th>
+                            <th scope="col" class="py-4 px-6">Email</th>
+                            <th scope="col" class="py-4 px-6 text-center">Role</th>
+                            <th scope="col" class="py-4 px-6 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr th:each="user : ${dataUsers}" class="hover:bg-slate-50 transition-colors duration-150">
+                            <td class="py-4 px-6 text-slate-500 font-medium" th:text="${user.id}">1</td>
+                            <td class="py-4 px-6 text-slate-700" th:text="${user.nik}">3273123456789</td>
+                            <td class="py-4 px-6 font-semibold text-slate-900" th:text="${user.namaLengkap}">Rian Satria</td>
+                            <td class="py-4 px-6 text-slate-600" th:text="${user.username}">riansatset</td>
+                            <td class="py-4 px-6 text-slate-600" th:text="${user.email}">rian@gmail.com</td>
+                            <td class="py-4 px-6 text-center">
+                                <span th:if="${user.role == 'ADMIN'}" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
+                                    ADMIN
+                                </span>
+                                <span th:if="${user.role != 'ADMIN'}" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200" th:text="${user.role}">
+                                    USER
+                                </span>
+                            </td>
+                            <td class="py-4 px-6 text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <a th:href="@{/users/edit/{id}(id=${user.id})}" title="Edit User" class="p-2 text-amber-500 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors">
+                                        <i class="bi bi-pencil-square text-lg"></i>
+                                    </a>
+                                    <a th:href="@{/users/hapus/{id}(id=${user.id})}" title="Hapus User" onclick="return confirm('Apakah kamu yakin ingin menghapus user ini secara permanen?')" class="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors">
+                                        <i class="bi bi-trash-fill text-lg"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(dataUsers)}">
+                            <td colspan="7" class="py-16 text-center">
+                                <div class="flex flex-col items-center justify-center text-slate-400">
+                                    <i class="bi bi-inbox text-5xl mb-3 text-slate-300"></i>
+                                    <p class="text-lg font-medium text-slate-600">Belum ada data user</p>
+                                    <p class="text-sm mt-1">Silakan klik "Tambah User" untuk memasukkan data baru.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
