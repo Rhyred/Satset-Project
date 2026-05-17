@@ -5,83 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SatSet - Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.0.16/24/outline/hero-icons.min.css" rel="stylesheet">
 </head>
 <body class="bg-slate-50 text-slate-800">
 <div class="min-h-screen">
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <header class="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-30">
         <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-            <div>
-                <p class="text-xs uppercase tracking-wider text-blue-600 font-semibold">SatSet SuperApp</p>
-                <h1 class="text-xl md:text-2xl font-bold">Pelayanan Publik Cepat & Terpadu</h1>
+            <div class="flex items-center gap-3">
+                <svg class="h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+                </svg>
+                <div>
+                    <p class="text-xs uppercase tracking-wider text-blue-600 font-semibold">SatSet SuperApp</p>
+                    <h1 class="text-xl md:text-2xl font-bold">Pelayanan Publik Cepat & Terpadu</h1>
+                </div>
             </div>
-            <nav class="hidden md:flex items-center gap-3 text-sm">
+            <nav class="hidden md:flex items-center gap-2 text-sm">
                 <a href="/" class="px-3 py-2 rounded-md bg-blue-600 text-white font-medium">Home</a>
-                <a href="/reports" class="px-3 py-2 rounded-md border border-slate-300 bg-white hover:bg-slate-100">Laporan & Feed</a>
-                <a href="/account" class="px-3 py-2 rounded-md border border-slate-300 bg-white hover:bg-slate-100">Akun</a>
+                <a href="/reports" class="px-3 py-2 rounded-md text-slate-600 hover:bg-slate-100 hover:text-slate-900">Laporan & Feed</a>
+                <a href="/account" class="px-3 py-2 rounded-md text-slate-600 hover:bg-slate-100 hover:text-slate-900">Akun</a>
             </nav>
         </div>
     </header>
 
     <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
-        <section class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white rounded-2xl p-6 md:p-8 shadow-md">
-            <p class="text-blue-100 text-sm mb-2">Halo Warga 👋</p>
-            <h2 class="text-2xl md:text-3xl font-bold mb-3">Semua urusan administrasi, sat-set dari satu aplikasi.</h2>
-            <p class="text-blue-100 max-w-2xl mb-5 text-sm md:text-base">
-                Ajukan antrian birokrasi, kirim pengaduan fasilitas umum, dan pantau tindak lanjut secara real-time.
-            </p>
-            <div class="flex flex-wrap gap-3">
-                <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition"
-                        onclick="alert('Fitur antrian akan dihubungkan ke backend pada fase berikutnya.')">
-                    Ambil Antrian Sekarang
-                </button>
-                <a href="/reports" class="bg-white/15 hover:bg-white/25 text-white border border-white/40 font-semibold py-2.5 px-4 rounded-lg text-sm transition">
-                    Buat Laporan Warga
-                </a>
+        <section class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-2xl p-6 md:p-10 shadow-lg relative overflow-hidden">
+            <div class="relative z-10">
+                <p class="text-blue-100 text-sm mb-2 font-medium">Halo Warga 👋</p>
+                <h2 class="text-3xl md:text-4xl font-bold mb-3">Semua urusan, sat-set dari satu aplikasi.</h2>
+                <p class="text-blue-100 max-w-2xl mb-6 text-sm md:text-base">
+                    Ajukan antrian birokrasi, kirim pengaduan fasilitas umum, dan pantau tindak lanjut secara real-time.
+                </p>
+                <div class="flex flex-wrap gap-3">
+                    <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2.5 px-5 rounded-lg text-sm transition-transform transform hover:scale-105 shadow"
+                            onclick="alert('Fitur antrian akan dihubungkan ke backend pada fase berikutnya.')">
+                        Ambil Antrian Sekarang
+                    </button>
+                    <a href="/reports" class="bg-white/20 hover:bg-white/30 text-white border border-white/40 font-semibold py-2.5 px-5 rounded-lg text-sm transition-transform transform hover:scale-105">
+                        Buat Laporan Warga
+                    </a>
+                </div>
+            </div>
+            <div class="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 opacity-10 pointer-events-none z-0">
+                <svg class="w-96 h-96 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+                </svg>
             </div>
         </section>
 
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <article class="bg-white rounded-xl border border-slate-200 p-4">
-                <p class="text-sm text-slate-500">Status Sistem</p>
-                <p class="text-2xl font-bold text-emerald-600 mt-1">Online</p>
+            <article class="bg-white rounded-xl border border-slate-200 p-5 flex items-start gap-4">
+                <div class="p-2 bg-green-100 rounded-lg">
+                    <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9 9.563C9 9.254 9.254 9 9.563 9h4.874c.309 0 .563.254.563.563v4.874c0 .309-.254.563-.563.563H9.563A.563.563 0 019 14.437V9.563z" /></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Status Sistem</p>
+                    <p class="text-2xl font-bold text-green-600 mt-1">Online</p>
+                </div>
             </article>
-            <article class="bg-white rounded-xl border border-slate-200 p-4">
-                <p class="text-sm text-slate-500">Antrian Aktif</p>
-                <p class="text-2xl font-bold mt-1">0</p>
+            <article class="bg-white rounded-xl border border-slate-200 p-5 flex items-start gap-4">
+                <div class="p-2 bg-yellow-100 rounded-lg">
+                    <svg class="h-6 w-6 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 00-10.656-3.322M6.344 9.344a9.38 9.38 0 003.322 10.656M12 21a9 9 0 009-9M3.375 10.5a9.38 9.38 0 0110.656-3.322M20.625 13.5a9.38 9.38 0 01-3.322 10.656" /></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Antrian Aktif</p>
+                    <p class="text-2xl font-bold mt-1">0</p>
+                </div>
             </article>
-            <article class="bg-white rounded-xl border border-slate-200 p-4">
-                <p class="text-sm text-slate-500">Laporan Diproses</p>
-                <p class="text-2xl font-bold mt-1">0</p>
+            <article class="bg-white rounded-xl border border-slate-200 p-5 flex items-start gap-4">
+                <div class="p-2 bg-blue-100 rounded-lg">
+                    <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18V7.125C3 6.504 3.504 6 4.125 6H9" /></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Laporan Diproses</p>
+                    <p class="text-2xl font-bold mt-1">0</p>
+                </div>
             </article>
-            <article class="bg-white rounded-xl border border-slate-200 p-4">
-                <p class="text-sm text-slate-500">Layanan Tersedia</p>
-                <p class="text-2xl font-bold mt-1">2 Modul</p>
+            <article class="bg-white rounded-xl border border-slate-200 p-5 flex items-start gap-4">
+                <div class="p-2 bg-indigo-100 rounded-lg">
+                    <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 8.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25A2.25 2.25 0 0113.5 8.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Layanan Tersedia</p>
+                    <p class="text-2xl font-bold mt-1">2 Modul</p>
+                </div>
             </article>
         </section>
 
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <article class="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-5">
-                <h3 class="text-lg font-semibold mb-3">Quick Action</h3>
-                <div class="grid sm:grid-cols-2 gap-3">
-                    <button class="text-left p-4 rounded-lg border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition"
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <article class="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-6">
+                <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <svg class="h-5 w-5 text-slate-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" /></svg>
+                    <span>Quick Action</span>
+                </h3>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <button class="text-left p-4 rounded-lg border border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 ease-in-out transform hover:-translate-y-1"
                             onclick="alert('Fitur pengajuan surat menyusul integrasi API.')">
-                        <p class="font-semibold">Pengajuan Surat</p>
-                        <p class="text-sm text-slate-500">KTP, KK, domisili, dan administrasi lainnya.</p>
+                        <p class="font-semibold text-slate-800">Pengajuan Surat</p>
+                        <p class="text-sm text-slate-500 mt-1">KTP, KK, domisili, dan administrasi lainnya.</p>
                     </button>
-                    <button class="text-left p-4 rounded-lg border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition"
+                    <button class="text-left p-4 rounded-lg border border-slate-200 hover:border-red-500 hover:bg-red-50 transition-all duration-200 ease-in-out transform hover:-translate-y-1"
                             onclick="alert('Fitur laporan terhubung pada fase API laporan.')">
-                        <p class="font-semibold">Laporan Pengaduan</p>
-                        <p class="text-sm text-slate-500">Laporkan jalan rusak, lampu mati, dan fasilitas umum.</p>
+                        <p class="font-semibold text-slate-800">Laporan Pengaduan</p>
+                        <p class="text-sm text-slate-500 mt-1">Laporkan jalan rusak, lampu mati, dan lainnya.</p>
                     </button>
                 </div>
             </article>
 
-            <article class="bg-white rounded-xl border border-slate-200 p-5">
-                <h3 class="text-lg font-semibold mb-3">Info Cepat</h3>
-                <ul class="space-y-2 text-sm text-slate-600">
-                    <li>• Estimasi antrian akan tampil setelah API aktif.</li>
-                    <li>• Feed komunitas ada di menu Laporan & Feed.</li>
-                    <li>• Profil warga tersedia di halaman Akun.</li>
+            <article class="bg-white rounded-xl border border-slate-200 p-6">
+                <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                     <svg class="h-5 w-5 text-slate-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" /></svg>
+                    <span>Info Cepat</span>
+                </h3>
+                <ul class="space-y-2.5 text-sm text-slate-600">
+                    <li class="flex items-start gap-2">
+                        <span class="font-semibold text-blue-500 mt-0.5">•</span> 
+                        <span>Estimasi antrian akan tampil setelah Mengambil antrian.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="font-semibold text-blue-500 mt-0.5">•</span> 
+                        <span>Feed komunitas ada di menu <strong>Laporan & Feed</strong>.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="font-semibold text-blue-500 mt-0.5">•</span> 
+                        <span>Profil warga dapat diakses di halaman <strong>Akun</strong>.</span>
+                    </li>
                 </ul>
             </article>
         </section>
