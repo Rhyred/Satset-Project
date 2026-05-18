@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 com/kelompok4/satset/repository/ContactMessageRepository.class
 com/kelompok4/satset/service/FeatureService.class
 com/kelompok4/satset/controller/api/ContactMessageApiController.class
@@ -9,3 +10,5 @@ com/kelompok4/satset/controller/api/FeatureApiController.class
 com/kelompok4/satset/service/ContactMessageService.class
 com/kelompok4/satset/model/ContactMessage.class
 com/kelompok4/satset/SatSetApplication.class
+=======
+>>>>>>> origin/dev
