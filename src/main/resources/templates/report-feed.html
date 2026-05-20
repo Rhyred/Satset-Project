@@ -2,12 +2,397 @@
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
 <head>
     <title>SatSet - Pengaduan & Feed</title>
+    <style>
+        .report-container {
+            max-width: 56rem;
+            margin: 0 auto;
+            margin-top: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .report-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .report-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-end;
+            }
+        }
+
+        .report-title h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.015em;
+        }
+
+        .report-subtitle {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        .btn-new-report {
+            background-color: #1e40af;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.625rem 1rem;
+            border-radius: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-new-report:hover {
+            background-color: #1e3a8a;
+        }
+
+        .tab-navigation {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-button {
+            white-space: nowrap;
+            padding: 0.75rem 0;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: none;
+            border: none;
+            color: #64748b;
+        }
+
+        .tab-button:hover {
+            color: #334155;
+            border-bottom-color: #cbd5e1;
+        }
+
+        .tab-button.active {
+            color: #1e40af;
+            border-bottom-color: #1e40af;
+        }
+
+        .report-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .report-card {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+        }
+
+        .report-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .report-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .report-card-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .report-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .report-avatar.self {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+
+        .report-avatar.other {
+            background-color: #e5e7eb;
+            color: #6b7280;
+        }
+
+        .report-user-info p {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .report-date {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .report-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #b45309;
+            border-color: #fcd34d;
+        }
+
+        .status-complete {
+            background-color: #f0fdf4;
+            color: #059669;
+            border-color: #dcfce7;
+        }
+
+        .report-title-text {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .report-description {
+            font-size: 0.875rem;
+            color: #475569;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: white;
+            border-radius: 1.5rem;
+            border: 2px dashed #cbd5e1;
+        }
+
+        .empty-icon {
+            width: 4rem;
+            height: 4rem;
+            background-color: #f1f5f9;
+            color: #cbd5e1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+        }
+
+        .empty-title {
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 0.25rem;
+        }
+
+        .empty-text {
+            font-size: 0.875rem;
+            color: #64748b;
+            max-width: 28rem;
+            margin: 0 auto 1rem;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .modal-overlay[x-show] {
+            display: flex;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.2s;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: transition(all 0.3s);
+            margin: auto;
+            min-height: 100%;
+            width: 100%;
+        }
+
+        @media (min-width: 640px) {
+            .modal-content {
+                min-height: auto;
+                max-width: 32rem;
+                width: 90%;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            line-height: 1.5;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .modal-close {
+            color: #94a3b8;
+            background-color: #f1f5f9;
+            border-radius: 50%;
+            padding: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #475569;
+            background-color: #e2e8f0;
+        }
+
+        .modal-body {
+            padding: 1rem 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 0.25rem;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.75rem;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-textarea {
+            resize: none;
+            font-family: inherit;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-top: 1px solid #f1f5f9;
+            background-color: #f8fafc;
+            flex-direction: row-reverse;
+        }
+
+        .btn-primary {
+            background-color: #1e40af;
+            color: white;
+            padding: 0.625rem 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0.75rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #1e3a8a;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #475569;
+            padding: 0.625rem 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f8fafc;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-1rem);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 <body>
 <div layout:fragment="header-title">Pengaduan Warga</div>
-<div layout:fragment="content" class="max-w-4xl mx-auto pb-10" 
-    x-data="{ 
-        activeTab: 'community', 
+<div layout:fragment="content" class="report-container"
+    x-data="{
+        activeTab: 'community',
         showModal: false,
         laporans: [],
         newReport: { judulLaporan: '', deskripsi: '', kategoriId: 2, userId: 1 },
@@ -20,7 +405,9 @@
                 let res = await fetch('/api/laporan');
                 let data = await res.json();
                 this.laporans = data.sort((a,b) => b.id - a.id);
-            } catch(e) {}
+            } catch(e) {
+                console.error('Error fetching reports:', e);
+            }
         },
         async submitReport() {
             if(!this.newReport.judulLaporan || !this.newReport.deskripsi) return;
@@ -38,6 +425,9 @@
                     await this.fetchLaporan();
                     this.activeTab = 'mine';
                 }
+            } catch(e) {
+                console.error('Error submitting report:', e);
+                alert('Gagal mengirim laporan. Silakan coba lagi.');
             } finally {
                 this.loading = false;
             }
@@ -50,132 +440,125 @@
             return new Date(dateStr).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
         }
     }">
-    
-    <!-- Header & Tabs -->
-    <div class="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Laporan & Pengaduan</h2>
-            <p class="text-sm text-slate-500 mt-1">Sampaikan keluhan fasilitas publik atau pantau aduan di sekitar Anda.</p>
+
+    <!-- Header -->
+    <div class="report-header">
+        <div class="report-title">
+            <h2>Laporan & Pengaduan</h2>
+            <p class="report-subtitle">Sampaikan keluhan fasilitas publik atau pantau aduan di sekitar Anda.</p>
         </div>
-        <button @click="showModal = true" class="bg-primary hover:bg-blue-800 text-white text-sm font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
+        <button @click="showModal = true" class="btn-new-report">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Buat Laporan Baru
         </button>
     </div>
 
     <!-- Tab Navigation -->
-    <div class="border-b border-slate-200 mb-6">
-        <nav class="flex space-x-6" aria-label="Tabs">
-            <button @click="activeTab = 'mine'" 
-                    :class="activeTab === 'mine' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'"
-                    class="whitespace-nowrap py-3 border-b-2 font-medium text-sm transition-colors">
-                Laporan Saya
-            </button>
-            <button @click="activeTab = 'community'" 
-                    :class="activeTab === 'community' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'"
-                    class="whitespace-nowrap py-3 border-b-2 font-medium text-sm transition-colors flex items-center gap-2">
-                Community Feed
-            </button>
-        </nav>
+    <div class="tab-navigation">
+        <button @click="activeTab = 'mine'" class="tab-button" :class="activeTab === 'mine' ? 'active' : ''">
+            Laporan Saya
+        </button>
+        <button @click="activeTab = 'community'" class="tab-button" :class="activeTab === 'community' ? 'active' : ''">
+            Community Feed
+        </button>
     </div>
 
     <!-- Tab Content: Laporan Saya -->
-    <div x-show="activeTab === 'mine'" x-transition.opacity class="space-y-4">
-        
-        <div x-show="myLaporans.length === 0" class="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-300">
-            <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+    <div x-show="activeTab === 'mine'" x-transition.opacity>
+        <div x-show="myLaporans.length === 0" class="empty-state">
+            <div class="empty-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><line x1="10" x2="8" y1="9" y2="9"></line></svg>
             </div>
-            <h3 class="font-bold text-slate-700 mb-1">Belum ada laporan</h3>
-            <p class="text-slate-500 text-sm max-w-sm mx-auto mb-4">Anda belum mengajukan laporan pengaduan apapun.</p>
+            <h3 class="empty-title">Belum ada laporan</h3>
+            <p class="empty-text">Anda belum mengajukan laporan pengaduan apapun.</p>
         </div>
 
-        <template x-for="laporan in myLaporans" :key="laporan.id">
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-start justify-between mb-3">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">Anda</div>
-                        <div>
-                            <p class="font-semibold text-slate-800 text-sm">Laporan #<span x-text="laporan.id"></span></p>
-                            <p class="text-xs text-slate-500" x-text="formatDate(laporan.createdAt)"></p>
+        <div class="report-list" x-show="myLaporans.length > 0">
+            <template x-for="laporan in myLaporans" :key="laporan.id">
+                <div class="report-card">
+                    <div class="report-card-header">
+                        <div class="report-card-user">
+                            <div class="report-avatar self">Anda</div>
+                            <div>
+                                <div class="report-user-info">
+                                    <p>Laporan #<span x-text="laporan.id"></span></p>
+                                    <p class="report-date" x-text="formatDate(laporan.createdAt)"></p>
+                                </div>
+                            </div>
                         </div>
+                        <div class="report-status" :class="laporan.statusLaporan === 'SELESAI' ? 'status-complete' : 'status-pending'" x-text="laporan.statusLaporan"></div>
                     </div>
-                    <div class="px-2.5 py-1 bg-amber-50 text-amber-600 border border-amber-100 rounded-lg text-xs font-medium" x-text="laporan.statusLaporan"></div>
+                    <h4 class="report-title-text" x-text="laporan.judulLaporan"></h4>
+                    <p class="report-description" x-text="laporan.deskripsi"></p>
                 </div>
-                <h4 class="font-bold text-slate-800 mb-1" x-text="laporan.judulLaporan"></h4>
-                <p class="text-sm text-slate-600 mb-3 leading-relaxed" x-text="laporan.deskripsi"></p>
-            </div>
-        </template>
+            </template>
+        </div>
     </div>
 
     <!-- Tab Content: Community Feed -->
-    <div x-show="activeTab === 'community'" x-cloak x-transition.opacity class="space-y-4">
-        
-        <template x-for="laporan in laporans" :key="laporan.id">
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-start justify-between mb-3">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-slate-200 rounded-full"></div>
-                        <div>
-                            <p class="font-semibold text-slate-800 text-sm">Warga #<span x-text="laporan.userId"></span></p>
-                            <p class="text-xs text-slate-500" x-text="formatDate(laporan.createdAt)"></p>
+    <div x-show="activeTab === 'community'" x-transition.opacity x-cloak>
+        <div class="report-list" x-show="laporans.length > 0">
+            <template x-for="laporan in laporans" :key="laporan.id">
+                <div class="report-card">
+                    <div class="report-card-header">
+                        <div class="report-card-user">
+                            <div class="report-avatar other"></div>
+                            <div>
+                                <div class="report-user-info">
+                                    <p>Warga #<span x-text="laporan.userId"></span></p>
+                                    <p class="report-date" x-text="formatDate(laporan.createdAt)"></p>
+                                </div>
+                            </div>
                         </div>
+                        <div class="report-status" :class="laporan.statusLaporan === 'SELESAI' ? 'status-complete' : 'status-pending'" x-text="laporan.statusLaporan"></div>
                     </div>
-                    <div class="px-2.5 py-1 rounded-lg text-xs font-medium"
-                         :class="laporan.statusLaporan === 'SELESAI' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-amber-50 text-amber-600 border border-amber-100'"
-                         x-text="laporan.statusLaporan"></div>
+                    <h4 class="report-title-text" x-text="laporan.judulLaporan"></h4>
+                    <p class="report-description" x-text="laporan.deskripsi"></p>
                 </div>
-                <h4 class="font-bold text-slate-800 mb-1" x-text="laporan.judulLaporan"></h4>
-                <p class="text-sm text-slate-600 mb-3 leading-relaxed" x-text="laporan.deskripsi"></p>
+            </template>
+        </div>
+
+        <div x-show="laporans.length === 0" class="empty-state">
+            <div class="empty-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line></svg>
             </div>
-        </template>
-        
-        <div x-show="laporans.length === 0" class="text-center py-12 text-slate-500">
-            Belum ada laporan dari warga.
+            <p class="empty-text">Belum ada laporan dari warga.</p>
         </div>
     </div>
 
     <!-- Create Report Modal -->
-    <div x-show="showModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div x-show="showModal" x-transition.opacity class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" @click="showModal = false" aria-hidden="true"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div x-show="showModal" 
-                 x-transition:enter="ease-out duration-300" 
-                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
-                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
-                 x-transition:leave="ease-in duration-200" 
-                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
-                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
-                 class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
-                
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-slate-100">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl leading-6 font-bold text-slate-900" id="modal-title">Buat Laporan Baru</h3>
-                        <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full p-1.5 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
+    <div x-show="showModal" x-cloak class="modal-overlay" @click.self="showModal = false">
+        <div class="modal-backdrop" @click="showModal = false"></div>
+        <div class="modal-content" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
+
+            <div class="modal-header">
+                <h3 class="modal-title">Buat Laporan Baru</h3>
+                <button @click="showModal = false" class="modal-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Judul Laporan</label>
+                        <input type="text" x-model="newReport.judulLaporan" class="form-input" placeholder="Misal: Jalan berlubang di depan pasar">
                     </div>
-                    
-                    <form class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Judul Laporan</label>
-                            <input type="text" x-model="newReport.judulLaporan" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="Misal: Jalan berlubang di depan pasar">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi Detail</label>
-                            <textarea rows="4" x-model="newReport.deskripsi" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none" placeholder="Ceritakan detail masalah, lokasi akurat, dan kondisi saat ini..."></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="bg-slate-50 px-4 py-4 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-100">
-                    <button type="button" @click="submitReport" :disabled="loading" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-semibold text-white hover:bg-blue-800 sm:ml-3 sm:w-auto sm:text-sm transition-colors disabled:opacity-50">
-                        Kirim Laporan
-                    </button>
-                    <button type="button" @click="showModal = false" class="mt-3 w-full inline-flex justify-center rounded-xl border border-slate-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-slate-700 hover:bg-slate-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
-                        Batal
-                    </button>
-                </div>
+                    <div class="form-group">
+                        <label class="form-label">Deskripsi Detail</label>
+                        <textarea rows="4" x-model="newReport.deskripsi" class="form-textarea" placeholder="Ceritakan detail masalah, lokasi akurat, dan kondisi saat ini..."></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" @click="submitReport" :disabled="loading" class="btn-primary">
+                    <span x-show="!loading">Kirim Laporan</span>
+                    <span x-show="loading">Mengirim...</span>
+                </button>
+                <button type="button" @click="showModal = false" class="btn-secondary">
+                    Batal
+                </button>
             </div>
         </div>
     </div>

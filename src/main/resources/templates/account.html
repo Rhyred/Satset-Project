@@ -2,10 +2,317 @@
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
 <head>
     <title>SatSet - Profil Akun</title>
+    <style>
+        .account-container {
+            max-width: 48rem;
+            margin: 0 auto;
+            margin-top: 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .profile-header {
+            background: white;
+            border-radius: 1.5rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        .profile-banner {
+            background: linear-gradient(to right, #1e40af, #60a5fa);
+            height: 8rem;
+        }
+
+        .profile-body {
+            padding: 1.5rem 1.5rem 2rem;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 6rem;
+            height: 6rem;
+            background: white;
+            border-radius: 50%;
+            padding: 0.375rem;
+            position: absolute;
+            top: -3rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            ring: 1rem solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-avatar-inner {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e40af, #60a5fa);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .profile-info {
+            margin-top: 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .profile-info {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .profile-name h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .profile-nik {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .badge-verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.75rem;
+            background-color: #f0fdf4;
+            border: 1px solid #dcfce7;
+            color: #059669;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .account-grid {
+                grid-template-columns: 1fr 2fr;
+            }
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .data-item {
+            margin-bottom: 1rem;
+        }
+
+        .data-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.25rem;
+        }
+
+        .data-value {
+            font-size: 0.875rem;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .edit-button {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            background-color: #f1f5f9;
+            color: #475569;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 1.5rem;
+        }
+
+        .edit-button:hover {
+            background-color: #e2e8f0;
+            border-color: #cbd5e1;
+            color: #1e40af;
+        }
+
+        .activity-section h3 {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .activity-box {
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .activity-item {
+            padding: 1.25rem;
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background-color 0.2s;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .activity-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .activity-item:hover .activity-avatar {
+            transform: scale(1.1);
+        }
+
+        .activity-avatar.queue {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+
+        .activity-avatar.report {
+            background-color: #fed7aa;
+            color: #ea580c;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: #1e293b;
+            transition: color 0.2s;
+        }
+
+        .activity-item:hover .activity-title {
+            color: #1e40af;
+        }
+
+        .activity-date {
+            font-size: 0.625rem;
+            font-weight: 500;
+            color: #94a3b8;
+        }
+
+        .activity-description {
+            font-size: 0.875rem;
+            color: #475569;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .status-badge.pending {
+            background-color: #fef3c7;
+            color: #b45309;
+            border-color: #fcd34d;
+        }
+
+        .status-badge.success {
+            background-color: #f0fdf4;
+            color: #059669;
+            border-color: #dcfce7;
+        }
+
+        .empty-state {
+            padding: 2rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-1rem);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 <body>
 <div layout:fragment="header-title">Profil Warga</div>
-<div layout:fragment="content" class="max-w-3xl mx-auto space-y-6 pb-10"
+<div layout:fragment="content" class="account-container"
     x-data="{
         user: { namaLengkap: 'Warga Teladan', nik: '3273010101010001', email: 'warga@satset.id' },
         antreans: [],
@@ -23,90 +330,83 @@
                 let allLaporan = await resL.json();
                 this.antreans = allAntrean.filter(a => a.userId === 1);
                 this.laporans = allLaporan.filter(l => l.userId === 1);
-            } catch(e) {}
+            } catch(e) {
+                console.error('Error fetching data:', e);
+            }
         },
         formatDate(dateStr) {
             if(!dateStr) return '';
             return new Date(dateStr).toLocaleDateString('id-ID');
         }
     }">
-    
+
     <!-- Profile Header -->
-    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="h-32 bg-gradient-to-r from-primary to-blue-400"></div>
-        <div class="px-6 sm:px-10 pb-8 relative">
-            <div class="w-24 h-24 bg-white rounded-full p-1.5 absolute -top-12 border border-slate-100 shadow-md">
-                <div class="w-full h-full bg-slate-100 rounded-full flex items-center justify-center text-slate-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
+    <div class="profile-header">
+        <div class="profile-banner"></div>
+        <div class="profile-body">
+            <div class="profile-avatar">
+                <div class="profile-avatar-inner">W</div>
             </div>
-            
-            <div class="mt-14 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-slate-800" x-text="user.namaLengkap"></h1>
-                    <p class="text-slate-500 font-medium" x-text="'NIK: ' + user.nik"></p>
+
+            <div class="profile-info">
+                <div class="profile-name">
+                    <h1 x-text="user.namaLengkap"></h1>
+                    <p class="profile-nik" x-text="'NIK: ' + user.nik"></p>
                 </div>
-                <div class="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-lg font-medium text-sm w-fit">
+                <div class="badge-verified">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 7 15 10 9 16" style="stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"></polyline></svg>
                     Akun Terverifikasi
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="md:col-span-1 space-y-6">
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                <h3 class="font-bold text-slate-800 mb-4 pb-3 border-b border-slate-100">Data Pribadi</h3>
-                <div class="space-y-4">
-                    <div>
-                        <p class="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Email</p>
-                        <p class="text-sm text-slate-700 font-medium" x-text="user.email"></p>
-                    </div>
+    <div class="account-grid">
+        <div>
+            <div class="sidebar-card">
+                <h3 class="card-title">Data Pribadi</h3>
+                <div class="data-item">
+                    <p class="data-label">Email</p>
+                    <p class="data-value" x-text="user.email"></p>
                 </div>
-                <button class="mt-6 w-full py-2 px-4 bg-slate-50 hover:bg-slate-100 text-slate-600 text-sm font-semibold rounded-xl border border-slate-200 transition-colors">
-                    Edit Profil
-                </button>
+                <button class="edit-button">Edit Profil</button>
             </div>
         </div>
 
-        <div class="md:col-span-2 space-y-4">
-            <h3 class="font-bold text-slate-800 text-lg">Riwayat Aktivitas</h3>
-            
-            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                <div class="divide-y divide-slate-100">
-                    
-                    <template x-for="antrean in antreans" :key="'A'+antrean.id">
-                        <div class="p-5 flex gap-4 hover:bg-slate-50 transition-colors">
-                            <div class="shrink-0 w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">A</div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-start mb-1">
-                                    <h4 class="font-semibold text-slate-800">Antrean <span x-text="antrean.nomorAntrian"></span></h4>
-                                    <span class="text-[10px] font-medium text-slate-400" x-text="formatDate(antrean.createdAt)"></span>
-                                </div>
-                                <p class="text-sm text-slate-600 mb-2" x-text="antrean.jenisSurat"></p>
-                                <div class="inline-flex items-center px-2 py-1 rounded-md bg-amber-50 text-amber-600 text-xs font-medium border border-amber-100" x-text="antrean.statusAntrian"></div>
-                            </div>
-                        </div>
-                    </template>
-                    
-                    <template x-for="laporan in laporans" :key="'L'+laporan.id">
-                        <div class="p-5 flex gap-4 hover:bg-slate-50 transition-colors">
-                            <div class="shrink-0 w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">L</div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-start mb-1">
-                                    <h4 class="font-semibold text-slate-800" x-text="laporan.judulLaporan"></h4>
-                                    <span class="text-[10px] font-medium text-slate-400" x-text="formatDate(laporan.createdAt)"></span>
-                                </div>
-                                <p class="text-sm text-slate-600 mb-2 line-clamp-1" x-text="laporan.deskripsi"></p>
-                                <div class="inline-flex items-center px-2 py-1 rounded-md bg-emerald-50 text-emerald-600 text-xs font-medium border border-emerald-100" x-text="laporan.statusLaporan"></div>
-                            </div>
-                        </div>
-                    </template>
-                    
-                    <div x-show="antreans.length === 0 && laporans.length === 0" class="p-8 text-center text-slate-500">
-                        Belum ada riwayat aktivitas.
-                    </div>
+        <div class="activity-section">
+            <h3>Riwayat Aktivitas</h3>
 
+            <div class="activity-box">
+                <template x-for="antrean in antreans" :key="'A'+antrean.id">
+                    <div class="activity-item">
+                        <div class="activity-avatar queue">A</div>
+                        <div class="activity-content">
+                            <div class="activity-header">
+                                <h4 class="activity-title">Antrean <span x-text="antrean.nomorAntrian"></span></h4>
+                                <span class="activity-date" x-text="formatDate(antrean.createdAt)"></span>
+                            </div>
+                            <p class="activity-description" x-text="antrean.jenisSurat"></p>
+                            <span class="status-badge pending" x-text="antrean.statusAntrian"></span>
+                        </div>
+                    </div>
+                </template>
+
+                <template x-for="laporan in laporans" :key="'L'+laporan.id">
+                    <div class="activity-item">
+                        <div class="activity-avatar report">L</div>
+                        <div class="activity-content">
+                            <div class="activity-header">
+                                <h4 class="activity-title" x-text="laporan.judulLaporan"></h4>
+                                <span class="activity-date" x-text="formatDate(laporan.createdAt)"></span>
+                            </div>
+                            <p class="activity-description" x-text="laporan.deskripsi"></p>
+                            <span class="status-badge success" x-text="laporan.statusLaporan"></span>
+                        </div>
+                    </div>
+                </template>
+
+                <div x-show="antreans.length === 0 && laporans.length === 0" class="empty-state">
+                    Belum ada riwayat aktivitas.
                 </div>
             </div>
         </div>

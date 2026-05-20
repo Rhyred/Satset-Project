@@ -38,4 +38,9 @@ public class HomeController {
     public String mading() {
         return "mading";
     }
+
+    @GetMapping("/test-css")
+    public String testCss() {
+        return "test-css";
+    }
 }
