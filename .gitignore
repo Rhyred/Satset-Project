@@ -48,7 +48,6 @@ build/
 
 ### VS Code ###
 .vscode/
-<<<<<<< HEAD
 .classpath
 .c9/
 *.launch
@@ -118,3 +117,4 @@ out/
 *.sublime-workspace
 
 .env
+src/main/resources/application.properties
