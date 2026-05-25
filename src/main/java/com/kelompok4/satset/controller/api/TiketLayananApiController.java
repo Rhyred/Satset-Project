@@ -31,12 +31,13 @@ public class TiketLayananApiController {
     }
 
     @PostMapping
-    public ResponseEntity<TiketLayanan> createTiket(@RequestBody TiketLayanan tiket, HttpSession session) {
+    public ResponseEntity<ApiResponse<TiketLayanan>> createTiket(@RequestBody TiketLayanan tiket, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
             tiket.setPemohon(user);
         }
-        return ResponseEntity.ok(tiketLayananService.createTiket(tiket));
+        TiketLayanan created = tiketLayananService.createTiket(tiket);
+        return ResponseEntity.ok(ApiResponse.success("Antrean berhasil diajukan", created));
     }
 
     @GetMapping("/{id}")

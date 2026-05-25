@@ -33,7 +33,12 @@ public class UserApiController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        return ResponseEntity.ok(userService.updateUser(id, userDetails));
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails, jakarta.servlet.http.HttpSession session) {
+        User updated = userService.updateUser(id, userDetails);
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null && sessionUser.getId().equals(id)) {
+            session.setAttribute("user", updated);
+        }
+        return ResponseEntity.ok(updated);
     }
 }

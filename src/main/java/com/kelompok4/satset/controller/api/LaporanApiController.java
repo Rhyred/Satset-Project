@@ -4,6 +4,7 @@ import com.kelompok4.satset.dto.response.ApiResponse;
 import com.kelompok4.satset.model.Laporan;
 import com.kelompok4.satset.model.User;
 import com.kelompok4.satset.service.LaporanService;
+import com.kelompok4.satset.service.TindakLanjutLaporanService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 public class LaporanApiController {
 
     private final LaporanService laporanService;
+    private final TindakLanjutLaporanService tindakLanjutLaporanService;
 
     @GetMapping
     public ResponseEntity<List<Laporan>> getAllLaporan() {
@@ -36,12 +38,13 @@ public class LaporanApiController {
     }
 
     @PostMapping
-    public ResponseEntity<Laporan> createLaporan(@RequestBody Laporan laporan, HttpSession session) {
+    public ResponseEntity<ApiResponse<Laporan>> createLaporan(@RequestBody Laporan laporan, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
             laporan.setPelapor(user);
         }
-        return ResponseEntity.ok(laporanService.createLaporan(laporan));
+        Laporan created = laporanService.createLaporan(laporan);
+        return ResponseEntity.ok(ApiResponse.success("Laporan berhasil dikirim", created));
     }
 
     @GetMapping("/{id}")
@@ -52,9 +55,24 @@ public class LaporanApiController {
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<ApiResponse<Laporan>> updateStatus(@PathVariable Long id, @RequestBody java.util.Map<String, String> body) {
+    public ResponseEntity<ApiResponse<Laporan>> updateStatus(@PathVariable Long id, @RequestBody java.util.Map<String, String> body, HttpSession session) {
         String status = body.get("status");
+        String catatan = body.get("catatan");
+        
         Laporan updated = laporanService.updateStatus(id, status);
+        
+        if (catatan != null && !catatan.isBlank()) {
+            User admin = (User) session.getAttribute("user");
+            com.kelompok4.satset.model.TindakLanjutLaporan tindakLanjut = new com.kelompok4.satset.model.TindakLanjutLaporan();
+            tindakLanjut.setLaporan(updated);
+            tindakLanjut.setCatatanAdmin(catatan);
+            tindakLanjut.setWaktuTindak(java.time.LocalDateTime.now());
+            if (admin != null) {
+                tindakLanjut.setAdmin(admin);
+            }
+            tindakLanjutLaporanService.create(tindakLanjut);
+        }
+        
         return ResponseEntity.ok(ApiResponse.success("Status laporan diperbarui", updated));
     }
 

@@ -31,4 +31,9 @@ public class TindakLanjutLaporanApiController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/laporan/{laporanId}")
+    public ResponseEntity<List<TindakLanjutLaporan>> getByLaporanId(@PathVariable Long laporanId) {
+        return ResponseEntity.ok(tindakLanjutLaporanService.getByLaporanId(laporanId));
+    }
 }

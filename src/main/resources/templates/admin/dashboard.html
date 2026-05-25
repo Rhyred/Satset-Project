@@ -437,11 +437,13 @@
                     });
                 },
                 async updateLaporanStatus(id, status) {
+                    let catatan = prompt(`Masukkan Catatan Tindak Lanjut untuk status: ${status} (opsional):`);
+                    if (catatan === null) return;
                     try {
                         let res = await fetch(`/api/laporan/${id}/status`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ status })
+                            body: JSON.stringify({ status, catatan })
                         });
                         let data = await res.json();
                         if (data.success) {

@@ -350,6 +350,22 @@
                     <div x-show="laporan.kategoriLayanan" style="margin-top: 0.5rem;">
                         <span class="badge-status status-diterima" style="font-size: 0.65rem;" x-text="laporan.kategoriLayanan.nama"></span>
                     </div>
+                    
+                    <!-- Tindak Lanjut History -->
+                    <div x-show="getTindakLanjutForLaporan(laporan.id).length > 0" style="margin-top: 1rem; padding: 1rem; border-radius: 0.75rem; background-color: var(--slate-50); border: 1px solid var(--border-card);">
+                        <p style="font-size: 0.75rem; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Riwayat Tindak Lanjut:</p>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <template x-for="tindak in getTindakLanjutForLaporan(laporan.id)" :key="tindak.id">
+                                <div style="font-size: 0.875rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                        <span style="font-weight: 600; color: var(--slate-700); word-break: break-word;" x-text="tindak.catatanAdmin"></span>
+                                        <span style="font-size: 0.75rem; color: var(--slate-400); white-space: nowrap;" x-text="formatDate(tindak.waktuTindak)"></span>
+                                    </div>
+                                    <div style="font-size: 0.75rem; color: var(--slate-400); margin-top: 0.125rem;" x-text="'Oleh Admin: ' + (tindak.admin ? tindak.admin.namaLengkap : 'Petugas SatSet')"></div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
                 </div>
             </template>
         </div>
@@ -376,6 +392,22 @@
                     <p class="report-description" x-text="laporan.deskripsi"></p>
                     <div x-show="laporan.kategoriLayanan" style="margin-top: 0.5rem;">
                         <span class="badge-status status-diterima" style="font-size: 0.65rem;" x-text="laporan.kategoriLayanan.nama"></span>
+                    </div>
+                    
+                    <!-- Tindak Lanjut History -->
+                    <div x-show="getTindakLanjutForLaporan(laporan.id).length > 0" style="margin-top: 1rem; padding: 1rem; border-radius: 0.75rem; background-color: var(--slate-50); border: 1px solid var(--border-card);">
+                        <p style="font-size: 0.75rem; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Riwayat Tindak Lanjut:</p>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <template x-for="tindak in getTindakLanjutForLaporan(laporan.id)" :key="tindak.id">
+                                <div style="font-size: 0.875rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                        <span style="font-weight: 600; color: var(--slate-700); word-break: break-word;" x-text="tindak.catatanAdmin"></span>
+                                        <span style="font-size: 0.75rem; color: var(--slate-400); white-space: nowrap;" x-text="formatDate(tindak.waktuTindak)"></span>
+                                    </div>
+                                    <div style="font-size: 0.75rem; color: var(--slate-400); margin-top: 0.125rem;" x-text="'Oleh Admin: ' + (tindak.admin ? tindak.admin.namaLengkap : 'Petugas SatSet')"></div>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -443,6 +475,7 @@
                 showModal: false,
                 laporans: [],
                 categories: [],
+                tindakLanjuts: [],
                 currentUserId: /*[[${currentUser != null ? currentUser.id : 0}]]*/ 0,
                 newReport: { judulLaporan: '', deskripsi: '', kategoriId: null, userId: null },
                 loading: false,
@@ -450,6 +483,7 @@
                     this.newReport.userId = this.currentUserId;
                     this.fetchLaporan();
                     this.fetchCategories();
+                    this.fetchTindakLanjuts();
                 },
                 async fetchLaporan() {
                     try {
@@ -459,6 +493,17 @@
                     } catch(e) {
                         console.error('Error fetching reports:', e);
                     }
+                },
+                async fetchTindakLanjuts() {
+                    try {
+                        let res = await fetch('/api/tindak-lanjut');
+                        this.tindakLanjuts = await res.json();
+                    } catch(e) {
+                        console.error('Error fetching tindak lanjut:', e);
+                    }
+                },
+                getTindakLanjutForLaporan(laporanId) {
+                    return this.tindakLanjuts.filter(t => t.laporanId === laporanId);
                 },
                 async fetchCategories() {
                     try {
