@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TindakLanjutLaporanRepository extends JpaRepository<TindakLanjutLaporan, Long> {
+    java.util.List<TindakLanjutLaporan> findByLaporanIdOrderByWaktuTindakDesc(Long laporanId);
 }

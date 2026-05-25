@@ -1,0 +1,376 @@
+# SATSET SUPER-APP — Full Audit, Redesign & Refactor Plan
+
+## Ringkasan
+
+Dokumen ini berisi hasil audit menyeluruh terhadap proyek SATSET SUPER-APP (backend + frontend) beserta rencana implementasi perbaikan secara bertahap. Tujuan utamanya: **menjadikan proyek ini layak dipresentasikan sebagai aplikasi nyata dengan arsitektur production-ready.**
+
+---
+
+## 1. Analisis Kelemahan Proyek Saat Ini
+
+### Backend — Critical Issues
+
+| # | Masalah | Dampak | Prioritas |
+|---|---------|--------|-----------|
+| 1 | **Tidak ada Authentication/Authorization** | Semua API terbuka, siapa saja bisa CRUD data tanpa login | 🔴 Kritis |
+| 2 | **Entity langsung diekspos ke API** (no DTO) | Password user terkirim ke frontend, data internal bocor | 🔴 Kritis |
+| 3 | **Tidak ada Validation** pada input | Data kosong/invalid bisa masuk ke database | 🔴 Kritis |
+| 4 | **Tidak ada Global Exception Handler** | Error 500 mentah muncul ke client, UX buruk | 🟡 Tinggi |
+| 5 | **Tidak ada Standard Response Wrapper** | Format JSON response tidak konsisten antar endpoint | 🟡 Tinggi |
+| 6 | **Relasi database menggunakan `Long userId`** bukan JPA `@ManyToOne` | Tidak ada foreign key constraint, data bisa corrupt | 🟡 Tinggi |
+| 7 | **Entity `Admin` dan `User` terpisah** padahal seharusnya role-based | Duplikasi konsep, membingungkan | 🟡 Tinggi |
+| 8 | **Tidak ada Pagination** | `findAll()` tanpa limit, berbahaya saat data besar | 🟡 Tinggi |
+| 9 | **Tidak ada operasi UPDATE dan DELETE** | CRUD tidak lengkap (hanya Create & Read) | 🟡 Tinggi |
+| 10 | **Nomor antrian random** (`Math.random()`) bukan sequential | Bisa duplikat, tidak realistis | 🟢 Sedang |
+| 11 | **Tidak ada DTO layer** | Violasi Separation of Concerns | 🟢 Sedang |
+| 12 | **Tidak ada enum untuk status** (hardcoded string) | Typo bisa menyebabkan bug | 🟢 Sedang |
+| 13 | **`ContactMessage` dan `Feature` tidak extend `BaseEntity`** | Inkonsistensi model inheritance | 🟢 Sedang |
+| 14 | **Tidak ada Logging** | Sulit debugging di production | 🟢 Sedang |
+| 15 | **`.gitignore` mengandung merge conflict markers** (`<<<<<<< HEAD`) | File korup | 🟢 Sedang |
+
+### Frontend — Critical Issues
+
+| # | Masalah | Dampak | Prioritas |
+|---|---------|--------|-----------|
+| 1 | **Tidak ada halaman Login/Register** | Tidak bisa otentikasi pengguna | 🔴 Kritis |
+| 2 | **User ID hardcoded (`userId: 1`)** di semua halaman | Semua data milik satu user saja | 🔴 Kritis |
+| 3 | **Tidak ada Dashboard Admin** | Admin tidak bisa mengelola data | 🟡 Tinggi |
+| 4 | **Tidak ada halaman Notifikasi** | Fitur notifikasi ada di backend tapi tidak di UI | 🟡 Tinggi |
+| 5 | **CSS utility classes di-reimplementasi manual** di `layout.html` (800+ baris) | Duplikasi dengan framework, sulit maintain | 🟡 Tinggi |
+| 6 | **Statistik dashboard hardcoded** (1,248 laporan, dll.) | Data palsu, bukan dari database | 🟡 Tinggi |
+| 7 | **Tidak ada Dark Mode** | Tidak sesuai requirement | 🟢 Sedang |
+| 8 | **Tidak ada skeleton loading** | UX kurang premium | 🟢 Sedang |
+| 9 | **Tidak ada toast notification** | Feedback aksi user kurang jelas | 🟢 Sedang |
+
+---
+
+## 2. Proposed Changes
+
+Perubahan dibagi dalam **4 fase** agar terkelola dan bisa diverifikasi secara bertahap.
+
+---
+
+### Fase 1: Backend Foundation & Clean Architecture
+
+> [!IMPORTANT]
+> Fase ini harus selesai sebelum fase lainnya karena menjadi fondasi seluruh sistem.
+
+#### [NEW] `src/.../dto/` — Data Transfer Objects
+
+Membuat DTO layer untuk memisahkan entity dari API response:
+- `request/LoginRequest.java`, `RegisterRequest.java`
+- `request/LaporanRequest.java`, `AntreanRequest.java`, `MadingRequest.java`
+- `response/ApiResponse.java` (standard wrapper: `{ success, message, data, timestamp }`)
+- `response/UserResponse.java`, `LaporanResponse.java`, `AntreanResponse.java`
+- `response/DashboardStatsResponse.java`
+
+#### [NEW] `src/.../enums/` — Status Enums
+
+- `StatusLaporan.java` (DITERIMA, DIPROSES, SELESAI, DITOLAK)
+- `StatusAntrian.java` (MENUNGGU, DIPANGGIL, DILAYANI, SELESAI)
+- `UserRole.java` (ADMIN, USER)
+- `JenisInformasi.java` (PENTING, INFO_WARGA, PENGUMUMAN)
+
+#### [NEW] `src/.../exception/` — Global Exception Handling
+
+- `GlobalExceptionHandler.java` (`@RestControllerAdvice`)
+- `ResourceNotFoundException.java`
+- `BadRequestException.java`
+- `UnauthorizedException.java`
+
+#### [MODIFY] `src/.../model/User.java` — Unified User + Admin
+
+Menggabungkan entity `Admin` menjadi field `role` di `User`:
+- Tambah field `role` (enum `UserRole`)
+- Tambah field `alamat`, `noTelepon`
+- Ubah relasi `userId` di entity lain menjadi `@ManyToOne`
+
+#### [MODIFY] Semua Entity — Proper JPA Relations
+
+Mengubah `Long userId`, `Long kategoriId`, dll menjadi `@ManyToOne` dengan proper foreign key:
+- `Laporan` → `@ManyToOne User pelapor`, `@ManyToOne KategoriLayanan kategori`
+- `TiketLayanan` → `@ManyToOne User pemohon`, `@ManyToOne KategoriLayanan kategori`
+- `Notifikasi` → `@ManyToOne User user`
+- `TindakLanjutLaporan` → `@ManyToOne Laporan laporan`, `@ManyToOne User admin`
+
+#### [MODIFY] Semua Service — Business Logic + Validation
+
+- Tambahkan validasi input
+- Tambahkan operasi `update()` dan `delete()`
+- Pagination menggunakan `Pageable`
+- Filtering dan sorting
+
+#### [MODIFY] Semua API Controller — Consistent REST API
+
+Standarisasi endpoint dan response:
+```
+POST   /api/auth/login
+POST   /api/auth/register
+GET    /api/users?page=0&size=10
+GET    /api/users/{id}
+PUT    /api/users/{id}
+DELETE /api/users/{id}
+GET    /api/laporan?status=DITERIMA&page=0
+POST   /api/laporan
+PUT    /api/laporan/{id}/status
+GET    /api/antrean?status=MENUNGGU
+POST   /api/antrean
+PUT    /api/antrean/{id}/status
+GET    /api/mading?jenis=PENTING
+POST   /api/mading
+PUT    /api/mading/{id}
+DELETE /api/mading/{id}
+GET    /api/notifikasi?userId={id}
+GET    /api/dashboard/stats
+```
+
+#### [NEW] `src/.../config/SecurityConfig.java` — Basic Auth (Session-based)
+
+> Menggunakan Spring Session (cookie-based) bukan JWT, karena Thymeleaf SSR + Alpine.js lebih cocok dengan session-based auth.
+
+- Login via form POST → set session
+- Endpoint `/api/**` protected
+- Role-based access: ADMIN vs USER
+- CORS configuration
+
+---
+
+### Fase 2: Frontend — Login, Auth Flow & Dashboard
+
+#### [NEW] `templates/login.html` — Halaman Login
+
+- Form login modern (email + password)
+- Animasi smooth
+- Error handling visual
+
+#### [NEW] `templates/register.html` — Halaman Register
+
+- Form registrasi (NIK, nama, email, password)
+- Validasi client-side
+
+#### [MODIFY] `templates/layout.html` — Refactor Layout
+
+- Pindahkan CSS utilities ke file `static/css/` terpisah
+- Tambahkan dynamic user info dari session (nama, avatar)
+- Tambahkan toast notification system
+- Tambahkan skeleton loading component
+
+#### [NEW] `templates/admin/dashboard.html` — Dashboard Admin
+
+- Statistik real-time dari API (`/api/dashboard/stats`)
+- Chart sederhana (jumlah laporan per status)
+- Tabel laporan terbaru
+- Tabel antrean aktif
+- Quick actions (approve laporan, panggil antrean)
+
+#### [MODIFY] `templates/home.html` — Dynamic Stats
+
+- Ganti statistik hardcoded dengan data dari API
+- Mading terkini dari API
+
+#### [MODIFY] `templates/account.html` — Real User Data
+
+- Data dari session user (bukan hardcoded)
+- Edit profil functionality
+
+---
+
+### Fase 3: Frontend — Feature Enhancement
+
+#### [MODIFY] `templates/report-feed.html` — Enhanced Reports
+
+- Kategori selector di form
+- Lampiran/attachment upload
+- Detail view per laporan
+- Status tracking timeline
+
+#### [MODIFY] `templates/queue.html` — Enhanced Queue
+
+- Nomor antrean sequential
+- Estimasi waktu layanan
+- History antrean user
+
+#### [MODIFY] `templates/mading.html` — Enhanced Mading
+
+- Search functionality
+- Rich text display
+- Tanggal relatif ("2 jam yang lalu")
+
+#### [NEW] `templates/notifikasi.html` — Halaman Notifikasi
+
+- List notifikasi user
+- Mark as read
+- Badge count di navigation
+
+---
+
+### Fase 4: Polish & Production-Ready
+
+#### [MODIFY] CSS — Design System Overhaul
+
+- Pisahkan CSS ke file modular di `static/css/`:
+  - `variables.css` — design tokens
+  - `layout.css` — navigation, header, main
+  - `components.css` — cards, badges, buttons, forms
+  - `animations.css` — keyframes & transitions
+  - `utilities.css` — sudah ada, diperkaya
+- Dark mode toggle (CSS custom properties)
+
+#### [MODIFY] `.gitignore` — Fix merge conflicts
+
+- Bersihkan conflict markers `<<<<<<< HEAD`
+- Pastikan `target/` ter-ignore
+
+#### [NEW] `src/.../config/DataSeeder.java` — Demo Data
+
+- Seed data realistis untuk presentasi
+- Admin default account
+- Sample laporan, antrean, mading
+
+---
+
+## 3. Struktur Folder Ideal (Setelah Refactor)
+
+```
+src/main/java/com/kelompok4/satset/
+├── SatSetApplication.java
+├── config/
+│   ├── WebConfig.java
+│   └── SecurityConfig.java
+├── controller/
+│   ├── PageController.java          (semua route halaman)
+│   └── api/
+│       ├── AuthApiController.java
+│       ├── UserApiController.java
+│       ├── LaporanApiController.java
+│       ├── AntreanApiController.java
+│       ├── MadingApiController.java
+│       ├── NotifikasiApiController.java
+│       └── DashboardApiController.java
+├── dto/
+│   ├── request/
+│   │   ├── LoginRequest.java
+│   │   ├── RegisterRequest.java
+│   │   ├── LaporanRequest.java
+│   │   ├── AntreanRequest.java
+│   │   └── MadingRequest.java
+│   └── response/
+│       ├── ApiResponse.java
+│       ├── UserResponse.java
+│       └── DashboardStatsResponse.java
+├── enums/
+│   ├── StatusLaporan.java
+│   ├── StatusAntrian.java
+│   ├── UserRole.java
+│   └── JenisInformasi.java
+├── exception/
+│   ├── GlobalExceptionHandler.java
+│   ├── ResourceNotFoundException.java
+│   └── BadRequestException.java
+├── model/
+│   ├── BaseEntity.java
+│   ├── User.java
+│   ├── Laporan.java
+│   ├── TiketLayanan.java
+│   ├── KategoriLayanan.java
+│   ├── Mading.java
+│   ├── Notifikasi.java
+│   ├── TindakLanjutLaporan.java
+│   └── ContactMessage.java
+├── repository/
+│   └── (semua repository interfaces)
+└── service/
+    ├── AuthService.java
+    ├── UserService.java
+    ├── LaporanService.java
+    ├── AntreanService.java
+    ├── MadingService.java
+    ├── NotifikasiService.java
+    └── DashboardService.java
+```
+
+---
+
+## 4. Database ERD (Setelah Refactor)
+
+```mermaid
+erDiagram
+    users ||--o{ laporan_user : "membuat"
+    users ||--o{ antrean_birokrasi : "mengajukan"
+    users ||--o{ notifikasi : "menerima"
+    users ||--o{ tindak_lanjut_laporan : "admin menindak"
+    kategori_layanan ||--o{ laporan_user : "dikategorikan"
+    kategori_layanan ||--o{ antrean_birokrasi : "dikategorikan"
+    laporan_user ||--o{ tindak_lanjut_laporan : "ditindaklanjuti"
+
+    users {
+        bigint id PK
+        varchar nik UK
+        varchar nama_lengkap
+        varchar username UK
+        varchar email UK
+        varchar password
+        varchar role "ADMIN/USER"
+        varchar no_telepon
+        varchar alamat
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    laporan_user {
+        bigint id PK
+        varchar judul_laporan
+        text deskripsi
+        varchar lampiran_url
+        varchar status_laporan "DITERIMA/DIPROSES/SELESAI/DITOLAK"
+        bigint user_id FK
+        bigint kategori_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    antrean_birokrasi {
+        bigint id PK
+        varchar nomor_antrian UK
+        varchar jenis_surat
+        varchar status_antrian "MENUNGGU/DIPANGGIL/DILAYANI/SELESAI"
+        timestamp waktu_pengajuan
+        bigint user_id FK
+        bigint kategori_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+```
+
+---
+
+## 5. Open Questions
+
+> [!IMPORTANT]
+> **Pertanyaan berikut akan mempengaruhi arah implementasi:**
+
+1. **Scope Authentication**: Apakah cukup menggunakan **session-based auth** (lebih sederhana, cocok untuk SSR Thymeleaf) atau Anda memerlukan **JWT token-based** (lebih cocok untuk SPA/Mobile)?
+   - **Rekomendasi saya**: Session-based, karena proyek ini menggunakan Thymeleaf SSR + Alpine.js.
+
+2. **Prioritas Fase**: Apakah Anda ingin saya mengerjakan **semua 4 fase sekaligus**, atau mau **fase per fase** agar bisa direview bertahap?
+
+3. **Scope Dashboard Admin**: Apakah dashboard admin perlu fitur lengkap (CRUD semua data, chart, analytics) atau cukup **overview stats + quick actions** (approve laporan, panggil antrean)?
+
+4. **Dark Mode**: Apakah dark mode menjadi **prioritas tinggi** atau bisa ditambahkan belakangan?
+
+5. **File Upload**: Untuk lampiran laporan, apakah cukup menyimpan **URL string** saja (seperti sekarang) atau perlu implementasi **file upload** ke server?
+
+---
+
+## 6. Verification Plan
+
+### Automated Tests
+- `./mvnw clean compile` — pastikan tidak ada compile error
+- `./mvnw spring-boot:run` — pastikan aplikasi start tanpa error
+- Test manual API via browser/Postman
+
+### Manual Verification
+- Navigasi semua halaman via browser (`http://localhost:8081`)
+- Test flow: Register → Login → Buat Laporan → Lihat Dashboard
+- Test responsiveness (mobile view via browser DevTools)
+- Screenshot sebelum & sesudah untuk perbandingan

@@ -29,4 +29,16 @@ public class UserService {
     public User createUser(User user) {
         return userRepository.save(user);
     }
+
+    public User updateUser(Long id, User userDetails) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setNamaLengkap(userDetails.getNamaLengkap());
+        user.setNoTelepon(userDetails.getNoTelepon());
+        user.setAlamat(userDetails.getAlamat());
+        if (userDetails.getEmail() != null && !userDetails.getEmail().isEmpty()) {
+            user.setEmail(userDetails.getEmail());
+        }
+        return userRepository.save(user);
+    }
 }

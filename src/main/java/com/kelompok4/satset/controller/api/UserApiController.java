@@ -31,4 +31,14 @@ public class UserApiController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails, jakarta.servlet.http.HttpSession session) {
+        User updated = userService.updateUser(id, userDetails);
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null && sessionUser.getId().equals(id)) {
+            session.setAttribute("user", updated);
+        }
+        return ResponseEntity.ok(updated);
+    }
 }

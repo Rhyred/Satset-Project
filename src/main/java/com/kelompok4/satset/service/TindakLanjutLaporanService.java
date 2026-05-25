@@ -23,6 +23,10 @@ public class TindakLanjutLaporanService {
         return tindakLanjutLaporanRepository.findById(id);
     }
 
+    public List<TindakLanjutLaporan> getByLaporanId(Long laporanId) {
+        return tindakLanjutLaporanRepository.findByLaporanIdOrderByWaktuTindakDesc(laporanId);
+    }
+
     public TindakLanjutLaporan create(TindakLanjutLaporan entity) {
         return tindakLanjutLaporanRepository.save(entity);
     }
