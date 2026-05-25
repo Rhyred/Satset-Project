@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Test - SatSet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/satset.css">
+</head>
+<body class="bg-slate-50">
+    <div class="p-8 max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-primary mb-4">SatSet CSS Test Page</h1>
+
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-white rounded-2xl border p-6 shadow-sm">
+                <div class="w-12 h-12 bg-emerald-100 rounded-xl text-emerald-600 flex items-center justify-center mb-3">
+                    ✓
+                </div>
+                <h3 class="font-bold text-slate-800 mb-2">CSS Loaded</h3>
+                <p class="text-sm text-slate-500">Styling is working correctly</p>
+            </div>
+
+            <div class="bg-white rounded-2xl border p-6 shadow-sm">
+                <div class="w-12 h-12 bg-blue-100 rounded-xl text-blue-600 flex items-center justify-center mb-3">
+                    ⚡
+                </div>
+                <h3 class="font-bold text-slate-800 mb-2">Bootstrap</h3>
+                <p class="text-sm text-slate-500">Bootstrap 5.3 as base</p>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-primary to-blue-400 text-white rounded-3xl p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Frontend CSS Fixes Applied</h2>
+            <ul class="space-y-2">
+                <li>✓ Comprehensive CSS utilities (satset.css)</li>
+                <li>✓ Bootstrap 5.3 as stable base</li>
+                <li>✓ Spring Boot WebConfig for static resources</li>
+                <li>✓ Google Fonts with fallback</li>
+                <li>✓ All Tailwind-like classes implemented locally</li>
+            </ul>
+        </div>
+
+        <div class="grid grid-cols-4 gap-4">
+            <button class="bg-primary text-white font-semibold py-3 px-4 rounded-xl hover:bg-blue-800 transition-all">
+                Primary
+            </button>
+            <button class="bg-emerald-600 text-white font-semibold py-3 px-4 rounded-xl hover:opacity-90 transition-all">
+                Success
+            </button>
+            <button class="bg-orange-600 text-white font-semibold py-3 px-4 rounded-xl hover:opacity-90 transition-all">
+                Warning
+            </button>
+            <button class="bg-red-600 text-white font-semibold py-3 px-4 rounded-xl hover:opacity-90 transition-all">
+                Danger
+            </button>
+        </div>
+    </div>
+</body>
+</html>

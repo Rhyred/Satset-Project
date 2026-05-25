@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Akun Saya</title>
+</head>
+<body>
+
+<div layout:fragment="content" class="space-y-6">
+    <!-- Page Header -->
+    <header>
+        <h1 class="text-3xl font-bold text-slate-900">Akun Saya</h1>
+        <p class="text-sm text-slate-500 mt-1">Kelola informasi profil dan preferensi Anda.</p>
+    </header>
+
+    <!-- Profile Information -->
+    <section class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8">
+        <div class="max-w-2xl">
+            <h3 class="text-lg font-semibold text-slate-800 mb-6">Informasi Profil</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-medium text-slate-500">Nama Lengkap</label>
+                    <p class="mt-1 text-lg font-semibold text-slate-900">Nama Pengguna</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-500">Nomor Induk Kependudukan (NIK)</label>
+                    <p class="mt-1 text-lg text-slate-900">3201010101010001</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-500">Nomor Telepon</label>
+                    <p class="mt-1 text-lg text-slate-900">+62 812 3456 7890</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Actions -->
+    <section>
+        <h3 class="text-lg font-semibold text-slate-800 mb-4 px-2">Tindakan</h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+            <button class="bg-white p-6 rounded-2xl border border-slate-200 text-left hover:border-slate-400 transition-colors duration-200">
+                <p class="font-semibold text-slate-800">Perbarui Profil</p>
+                <p class="text-sm text-slate-500 mt-1">Ubah nama, nomor telepon, atau informasi lainnya.</p>
+            </button>
+            <button class="bg-white p-6 rounded-2xl border border-slate-200 text-left hover:border-red-400 transition-colors duration-200">
+                <p class="font-semibold text-red-600">Keluar</p>
+                <p class="text-sm text-slate-500 mt-1">Keluar dari akun Anda di perangkat ini.</p>
+            </button>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>
