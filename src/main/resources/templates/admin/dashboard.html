@@ -189,20 +189,25 @@
         </section>
 
         <!-- Charts & Analytics Section -->
-        <section class="grid grid-cols-2 gap-4">
-            <div class="card-modern">
-                <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">Status Laporan Warga</h3>
-                <div style="max-height: 250px; display: flex; justify-content: center;">
-                    <canvas id="laporanChart"></canvas>
-                </div>
-            </div>
-            <div class="card-modern">
-                <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">Status Antrean Birokrasi</h3>
-                <div style="max-height: 250px; display: flex; justify-content: center;">
-                    <canvas id="antreanChart"></canvas>
-                </div>
-            </div>
-        </section>
+<section class="grid grid-cols-2 gap-4">
+    <div class="card-modern">
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: blue;">
+            Status Laporan Warga
+        </h3>
+        <div style="max-height: 250px; display: flex; justify-content: center;">
+            <canvas id="laporanChart"></canvas>
+        </div>
+    </div>
+
+    <div class="card-modern">
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: blue;">
+            Status Antrean Birokrasi
+        </h3>
+        <div style="max-height: 250px; display: flex; justify-content: center;">
+            <canvas id="antreanChart"></canvas>
+        </div>
+    </div>
+</section>
 
         <!-- Tab Controllers -->
         <section class="d-flex gap-2" style="border-bottom: 1px solid var(--border-card); padding-bottom: 0.5rem;">
@@ -299,7 +304,7 @@
         <section x-show="activeTab === 'mading'">
             <div class="section-header">
                 <h3>Kelola Mading Digital</h3>
-                <button class="btn-action btn-action-primary" @click="showMadingModal = true">Tambah Pengumuman</button>
+                <button class="btn-action btn-action-primary" @click="addMading()">Tambah Pengumuman</button>
             </div>
             <div class="table-responsive">
                 <table class="table-admin">
@@ -320,7 +325,10 @@
                                     <span class="badge-status" :class="item.isPublished ? 'badge-selesai' : 'badge-secondary'" x-text="item.isPublished ? 'Published' : 'Draft'">Published</span>
                                 </td>
                                 <td>
-                                    <button @click="deleteMading(item.id)" class="btn-action btn-action-danger">Hapus</button>
+                                    <div class="d-flex gap-1">
+                                        <button @click="editMading(item)" class="btn-action btn-action-primary">Edit</button>
+                                        <button @click="deleteMading(item.id)" class="btn-action btn-action-danger">Hapus</button>
+                                    </div>
                                 </td>
                             </tr>
                         </template>
@@ -335,7 +343,7 @@
         <!-- Mading Modal -->
         <div x-show="showMadingModal" x-cloak class="modal-overlay">
             <div class="modal-card" @click.outside="showMadingModal = false">
-                <h3 style="font-weight: 700; margin-bottom: 1.25rem;">Buat Mading Baru</h3>
+                <h3 style="font-weight: 700; margin-bottom: 1.25rem;" x-text="newMading.id ? 'Edit Mading' : 'Buat Mading Baru'">Buat Mading Baru</h3>
                 <div class="form-group">
                     <label>Judul Pengumuman</label>
                     <input type="text" x-model="newMading.judul" placeholder="Masukkan judul..." style="background-color: var(--slate-50); border: 1px solid var(--border-card); color: var(--slate-800);">
@@ -352,9 +360,13 @@
                     <label>Konten Informasi</label>
                     <textarea x-model="newMading.konten" rows="4" placeholder="Tulis pengumuman lengkap..." style="background-color: var(--slate-50); border: 1px solid var(--border-card); color: var(--slate-800);"></textarea>
                 </div>
+                <div class="form-group mt-3 d-flex align-items-center gap-2">
+                    <input type="checkbox" id="madingPublished" x-model="newMading.isPublished" style="width: auto; height: 18px; width: 18px; cursor: pointer;">
+                    <label for="madingPublished" style="margin: 0; cursor: pointer; font-size: 0.875rem;">Terbitkan Pengumuman (Published)</label>
+                </div>
                 <div class="d-flex justify-content-end gap-2 mt-4">
                     <button class="btn-action btn-action-secondary" @click="showMadingModal = false">Batal</button>
-                    <button class="btn-action btn-action-primary" @click="saveMading">Simpan & Terbitkan</button>
+                    <button class="btn-action btn-action-primary" @click="saveMading" x-text="newMading.id ? 'Simpan Perubahan' : 'Simpan & Terbitkan'">Simpan & Terbitkan</button>
                 </div>
             </div>
         </div>
@@ -495,21 +507,35 @@
                 },
                 async saveMading() {
                     try {
-                        let res = await fetch('/api/mading', {
-                            method: 'POST',
+                        let url = '/api/mading';
+                        let method = 'POST';
+                        if (this.newMading.id) {
+                            url = `/api/mading/${this.newMading.id}`;
+                            method = 'PUT';
+                        }
+                        let res = await fetch(url, {
+                            method: method,
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(this.newMading)
                         });
                         let data = await res.json();
                         if (data.success) {
-                            this.$root.showToast('Mading baru berhasil diterbitkan');
+                            this.$root.showToast(this.newMading.id ? 'Mading berhasil diperbarui' : 'Mading baru berhasil diterbitkan');
                             this.showMadingModal = false;
                             this.newMading = { judul: '', konten: '', jenisInformasi: 'PENGUMUMAN', isPublished: true };
                             this.loadDashboardData();
                         }
                     } catch(e) {
-                        this.$root.showToast('Gagal terbitkan mading', 'danger');
+                        this.$root.showToast('Gagal menyimpan mading', 'danger');
                     }
+                },
+                editMading(item) {
+                    this.newMading = { ...item };
+                    this.showMadingModal = true;
+                },
+                addMading() {
+                    this.newMading = { judul: '', konten: '', jenisInformasi: 'PENGUMUMAN', isPublished: true };
+                    this.showMadingModal = true;
                 },
                 async deleteMading(id) {
                     if (!confirm('Hapus mading ini?')) return;

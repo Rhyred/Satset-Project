@@ -13,6 +13,9 @@ public class DataSeeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final KategoriLayananRepository kategoriLayananRepository;
     private final MadingRepository madingRepository;
+    private final LaporanRepository laporanRepository;
+    private final TiketLayananRepository tiketLayananRepository;
+    private final TindakLanjutLaporanRepository tindakLanjutLaporanRepository;
 
     @Override
     public void run(String... args) {
@@ -84,6 +87,105 @@ public class DataSeeder implements CommandLineRunner {
             m3.setJenisInformasi("PENGUMUMAN");
             m3.setIsPublished(true);
             madingRepository.save(m3);
+        }
+
+        // Get admin and warga objects for foreign key references
+        User adminUser = userRepository.findByEmail("admin@satset.id").orElse(null);
+        User wargaUser = userRepository.findByEmail("warga@satset.id").orElse(null);
+        KategoriLayanan birokrasiCat = kategoriLayananRepository.findAll().stream().filter(c -> "BIROKRASI".equals(c.getTipe())).findFirst().orElse(null);
+        KategoriLayanan pengaduanCat = kategoriLayananRepository.findAll().stream().filter(c -> "PENGADUAN".equals(c.getTipe())).findFirst().orElse(null);
+
+        // Seed Laporan and TindakLanjut if not already present
+        boolean hasDemoLaporan = laporanRepository.findAll().stream()
+                .anyMatch(l -> "Jalan Berlubang di Jl. Sudirman".equals(l.getJudulLaporan()));
+        if (!hasDemoLaporan && wargaUser != null && pengaduanCat != null) {
+            // Laporan 1: Selesai
+            Laporan l1 = new Laporan();
+            l1.setJudulLaporan("Jalan Berlubang di Jl. Sudirman");
+            l1.setDeskripsi("Ada lubang yang cukup besar di tengah jalan Sudirman depan ruko No. 42. Sangat membahayakan pengendara motor saat malam hari.");
+            l1.setStatusLaporan("SELESAI");
+            l1.setPelapor(wargaUser);
+            l1.setKategori(pengaduanCat);
+            l1 = laporanRepository.save(l1);
+
+            TindakLanjutLaporan t1_1 = new TindakLanjutLaporan();
+            t1_1.setCatatanAdmin("Laporan diterima dan diteruskan ke Dinas Pekerjaan Umum.");
+            t1_1.setWaktuTindak(java.time.LocalDateTime.now().minusDays(2));
+            t1_1.setLaporan(l1);
+            t1_1.setAdmin(adminUser);
+            tindakLanjutLaporanRepository.save(t1_1);
+
+            TindakLanjutLaporan t1_2 = new TindakLanjutLaporan();
+            t1_2.setCatatanAdmin("Petugas mulai menambal lubang jalan menggunakan aspal.");
+            t1_2.setWaktuTindak(java.time.LocalDateTime.now().minusDays(1));
+            t1_2.setLaporan(l1);
+            t1_2.setAdmin(adminUser);
+            tindakLanjutLaporanRepository.save(t1_2);
+
+            TindakLanjutLaporan t1_3 = new TindakLanjutLaporan();
+            t1_3.setCatatanAdmin("Jalan selesai diperbaiki dan sudah rata kembali.");
+            t1_3.setWaktuTindak(java.time.LocalDateTime.now());
+            t1_3.setLaporan(l1);
+            t1_3.setAdmin(adminUser);
+            tindakLanjutLaporanRepository.save(t1_3);
+
+            // Laporan 2: Diproses
+            Laporan l2 = new Laporan();
+            l2.setJudulLaporan("Lampu Penerangan Jalan Padam");
+            l2.setDeskripsi("Lampu jalan di RT 03/RW 04 mati total sejak 3 hari lalu. Kondisi lingkungan menjadi sangat gelap saat malam.");
+            l2.setStatusLaporan("DIPROSES");
+            l2.setPelapor(wargaUser);
+            l2.setKategori(pengaduanCat);
+            l2 = laporanRepository.save(l2);
+
+            TindakLanjutLaporan t2_1 = new TindakLanjutLaporan();
+            t2_1.setCatatanAdmin("Laporan dikonfirmasi. Koordinasi dengan PLN sedang berjalan.");
+            t2_1.setWaktuTindak(java.time.LocalDateTime.now().minusHours(12));
+            t2_1.setLaporan(l2);
+            t2_1.setAdmin(adminUser);
+            tindakLanjutLaporanRepository.save(t2_1);
+
+            // Laporan 3: Baru (Diterima)
+            Laporan l3 = new Laporan();
+            l3.setJudulLaporan("Tumpukan Sampah Liar di Gang Damai");
+            l3.setDeskripsi("Ada warga luar yang membuang tumpukan sampah plastik di pojok gang sehingga menimbulkan bau tidak sedap.");
+            l3.setStatusLaporan("DITERIMA");
+            l3.setPelapor(wargaUser);
+            l3.setKategori(pengaduanCat);
+            laporanRepository.save(l3);
+        }
+
+        // Seed TiketLayanan if specific demo ticket is not present
+        if (tiketLayananRepository.findByNomorAntrian("A-2505-001").isEmpty() && wargaUser != null && birokrasiCat != null) {
+            // Tiket 1: Selesai
+            TiketLayanan tik1 = new TiketLayanan();
+            tik1.setNomorAntrian("A-2505-001");
+            tik1.setJenisSurat("Pelayanan Kependudukan - Pembuatan Kartu Keluarga");
+            tik1.setStatusAntrian("SELESAI");
+            tik1.setWaktuPengajuan(java.time.LocalDateTime.now().minusDays(1));
+            tik1.setPemohon(wargaUser);
+            tik1.setKategori(birokrasiCat);
+            tiketLayananRepository.save(tik1);
+
+            // Tiket 2: Dipanggil
+            TiketLayanan tik2 = new TiketLayanan();
+            tik2.setNomorAntrian("A-2505-002");
+            tik2.setJenisSurat("Pelayanan Kependudukan - Perekaman KTP-el");
+            tik2.setStatusAntrian("DIPANGGIL");
+            tik2.setWaktuPengajuan(java.time.LocalDateTime.now());
+            tik2.setPemohon(wargaUser);
+            tik2.setKategori(birokrasiCat);
+            tiketLayananRepository.save(tik2);
+
+            // Tiket 3: Menunggu
+            TiketLayanan tik3 = new TiketLayanan();
+            tik3.setNomorAntrian("B-2505-001");
+            tik3.setJenisSurat("Layanan Perizinan - Surat Keterangan Usaha (SKU)");
+            tik3.setStatusAntrian("MENUNGGU");
+            tik3.setWaktuPengajuan(java.time.LocalDateTime.now().plusHours(2));
+            tik3.setPemohon(wargaUser);
+            tik3.setKategori(birokrasiCat);
+            tiketLayananRepository.save(tik3);
         }
     }
 }
