@@ -10,7 +10,13 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
-
+    <script>
+        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
     <style>
         /* ========== ROOT & VARIABLES ========== */
         :root {
@@ -31,6 +37,22 @@
             --slate-700: #334155;
             --slate-800: #1e293b;
             --slate-900: #0f172a;
+            --bg-card: #ffffff;
+            --border-card: var(--slate-200);
+        }
+        .dark {
+            --slate-50: #0f172a;
+            --slate-100: #1e293b;
+            --slate-200: #334155;
+            --slate-300: #475569;
+            --slate-400: #64748b;
+            --slate-500: #94a3b8;
+            --slate-600: #cbd5e1;
+            --slate-700: #e2e8f0;
+            --slate-800: #f8fafc;
+            --slate-900: #ffffff;
+            --bg-card: #1e293b;
+            --border-card: #334155;
         }
 
         * {
@@ -802,7 +824,21 @@
         }
     </style>
 </head>
-<body>
+<body x-data="globalApp" :class="darkMode ? 'dark' : ''" x-cloak>
+
+    <!-- Toast Notifications -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1060; max-width: 350px;">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div class="toast show align-items-center border-0 mb-2 shadow" 
+                 :style="toast.type === 'success' ? 'background-color:#10b981;color:#fff;' : 'background-color:#ef4444;color:#fff;'"
+                 role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body" x-text="toast.message"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" @click="toasts = toasts.filter(t => t.id !== toast.id)"></button>
+                </div>
+            </div>
+        </template>
+    </div>
 
     <nav>
         <div class="logo">
@@ -812,37 +848,67 @@
             <span>SatSet</span>
         </div>
         <div class="nav-links">
-            <a href="/" th:classappend="${#httpServletRequest.requestURI == '/' ? 'active' : ''}">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <a href="/" th:classappend="${currentUri == '/' ? 'active' : ''}">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                <span>Beranda</span>
             </a>
-            <a href="/queue" th:classappend="${#httpServletRequest.requestURI == '/queue' ? 'active' : ''}">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14h6"></path><path d="M9 10h6"></path><path d="M9 18h6"></path></svg>
+            <a href="/queue" th:classappend="${currentUri == '/queue' ? 'active' : ''}">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14h6"></path><path d="M9 10h6"></path><path d="M9 18h6"></path></svg>
                <span>Antrean</span>
             </a>
-            <a href="/reports" th:classappend="${#httpServletRequest.requestURI == '/reports' ? 'active' : ''}">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+            <a href="/reports" th:classappend="${currentUri == '/reports' ? 'active' : ''}">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
                <span>Pengaduan</span>
             </a>
-            <a href="/mading" th:classappend="${#httpServletRequest.requestURI == '/mading' ? 'active' : ''}">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            <a href="/mading" th:classappend="${currentUri == '/mading' ? 'active' : ''}">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                <span>Mading</span>
             </a>
-            <a href="/account" th:classappend="${#httpServletRequest.requestURI == '/account' ? 'active' : ''}">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+            <a href="/notifikasi" th:classappend="${currentUri == '/notifikasi' ? 'active' : ''}">
+               <div class="position-relative">
+                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                   <span x-show="unreadNotifications > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.55rem; padding: 0.25em 0.5em;" x-text="unreadNotifications"></span>
+               </div>
+               <span>Notifikasi</span>
+            </a>
+            <a href="/account" th:classappend="${currentUri == '/account' ? 'active' : ''}">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
                <span>Profil</span>
+            </a>
+            <th:block th:if="${isAdmin}">
+                <a href="/admin" th:classappend="${currentUri == '/admin' ? 'active' : ''}">
+                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                   <span>Admin Panel</span>
+                </a>
+            </th:block>
+            <a href="javascript:void(0)" @click="logout" style="margin-top: auto; color: var(--danger)">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+               <span>Keluar</span>
             </a>
         </div>
     </nav>
 
-    <div class="main-wrapper">
-        <header>
-            <h1 layout:fragment="header-title">Beranda</h1>
+    <div class="main-wrapper" style="background-color: var(--slate-50); color: var(--slate-800);">
+        <header style="background-color: var(--bg-card); border-bottom: 1px solid var(--border-card);">
+            <h1 layout:fragment="header-title" style="color: var(--slate-800);">Beranda</h1>
             <div class="header-right">
-                <button style="background: none; border: none; padding: 0.5rem; cursor: pointer; color: var(--slate-400); border-radius: 50%; transition: all 0.2s;" onmouseover="this.style.color='var(--slate-600)'; this.style.backgroundColor='var(--slate-100)'" onmouseout="this.style.color='var(--slate-400)'; this.style.backgroundColor='transparent'">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <!-- Theme Toggle -->
+                <button @click="toggleDarkMode" style="background: none; border: none; padding: 0.5rem; cursor: pointer; color: var(--slate-400); border-radius: 50%; transition: all 0.2s;" onmouseover="this.style.backgroundColor='var(--slate-100)'" onmouseout="this.style.backgroundColor='transparent'">
+                    <!-- Sun icon -->
+                    <svg x-show="darkMode" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <!-- Moon icon -->
+                    <svg x-show="!darkMode" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                 </button>
-                <div style="width: 2rem; height: 2rem; background-color: rgba(30, 64, 175, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 700;">W</div>
+                
+                <!-- Notification bell -->
+                <a href="/notifikasi" style="background: none; border: none; padding: 0.5rem; cursor: pointer; color: var(--slate-400); border-radius: 50%; transition: all 0.2s; position: relative;" onmouseover="this.style.backgroundColor='var(--slate-100)'" onmouseout="this.style.backgroundColor='transparent'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <span x-show="unreadNotifications > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.55rem;" x-text="unreadNotifications"></span>
+                </a>
+                
+                <!-- User avatar -->
+                <div style="width: 2.25rem; height: 2.25rem; background-color: rgba(30, 64, 175, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 700; border: 1px solid var(--border-card);" 
+                     th:text="${currentUser != null and currentUser.namaLengkap != null and !currentUser.namaLengkap.isEmpty() ? currentUser.namaLengkap.substring(0, 1).toUpperCase() : 'U'}">U</div>
             </div>
         </header>
 
@@ -851,5 +917,59 @@
         </main>
     </div>
 
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('globalApp', () => ({
+                darkMode: localStorage.getItem('dark-mode') === 'true',
+                unreadNotifications: 0,
+                toasts: [],
+                init() {
+                    this.fetchUnreadCount();
+                    setInterval(() => this.fetchUnreadCount(), 20000);
+                    window.addEventListener('update-unread-notif', () => {
+                        this.fetchUnreadCount();
+                    });
+                },
+                toggleDarkMode() {
+                    this.darkMode = !this.darkMode;
+                    localStorage.setItem('dark-mode', this.darkMode);
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                },
+                async fetchUnreadCount() {
+                    try {
+                        let res = await fetch('/api/notifikasi/unread-count');
+                        if (res.ok) {
+                            let data = await res.json();
+                            if (data.success) {
+                                this.unreadNotifications = data.data;
+                            }
+                        }
+                    } catch (e) {}
+                },
+                showToast(message, type = 'success') {
+                    const id = Date.now();
+                    this.toasts.push({ id, message, type });
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 4000);
+                },
+                async logout() {
+                    try {
+                        let res = await fetch('/api/auth/logout', { method: 'POST' });
+                        if (res.ok) {
+                            window.location.href = '/login';
+                        }
+                    } catch (e) {
+                        this.showToast('Gagal logout', 'danger');
+                    }
+                }
+            }));
+        });
+    </script>
+    <th:block layout:fragment="script"></th:block>
 </body>
 </html>

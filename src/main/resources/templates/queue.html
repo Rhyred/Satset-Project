@@ -4,16 +4,19 @@
     <title>SatSet - Antrean Birokrasi</title>
     <style>
         .queue-container {
-            max-width: 56rem;
+            max-width: 60rem;
             margin: 0 auto;
             margin-top: 1.5rem;
             margin-bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
 
         .queue-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 1.5rem;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-card);
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             overflow: hidden;
             display: flex;
@@ -74,45 +77,46 @@
 
         .service-option {
             padding: 1rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border-card);
             border-radius: 0.75rem;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 1rem;
             cursor: pointer;
+            background: var(--bg-card);
         }
 
         .service-option:hover {
-            border-color: #cbd5e1;
+            border-color: var(--primary);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
         }
 
         .service-option.selected {
-            border-color: #1e40af;
-            background-color: #eff6ff;
+            border-color: var(--primary);
+            background-color: rgba(59, 130, 246, 0.1);
         }
 
         .service-icon {
             width: 2.5rem;
             height: 2.5rem;
             border-radius: 50%;
-            background-color: white;
+            background-color: var(--slate-100);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #1e40af;
+            color: var(--primary);
             font-weight: 700;
             font-size: 0.875rem;
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
 
         .ticket-box {
-            border: 2px dashed #1e40af;
+            border: 2px dashed var(--primary);
             border-radius: 1rem;
             padding: 1.5rem;
-            background-color: #eff6ff;
+            background-color: rgba(30, 64, 175, 0.05);
             text-align: center;
             max-width: 24rem;
             margin: 0 auto;
@@ -121,7 +125,7 @@
         .ticket-number {
             font-size: 3.75rem;
             font-weight: 900;
-            color: #1e40af;
+            color: var(--primary);
             margin: 1rem 0;
             letter-spacing: -0.02em;
         }
@@ -134,28 +138,30 @@
             display: block;
             font-size: 0.875rem;
             font-weight: 500;
-            color: #334155;
+            color: var(--slate-700);
             margin-bottom: 0.5rem;
         }
 
         .form-input {
             width: 100%;
             padding: 0.5rem 1rem;
-            border: 1px solid #cbd5e1;
+            border: 1px solid var(--border-card);
             border-radius: 0.75rem;
             font-family: inherit;
             font-size: 1rem;
+            background-color: var(--bg-card);
+            color: var(--slate-800);
             transition: all 0.2s;
         }
 
         .form-input:focus {
             outline: none;
-            border-color: #1e40af;
+            border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
         }
 
         .btn-primary {
-            background-color: #1e40af;
+            background-color: var(--primary);
             color: white;
             padding: 0.625rem 1.5rem;
             border-radius: 0.75rem;
@@ -167,7 +173,7 @@
         }
 
         .btn-primary:hover:not(:disabled) {
-            background-color: #1e3a8a;
+            background-color: var(--primary-dark);
             transform: translateY(-1px);
             box-shadow: 0 4px 6px rgba(30, 64, 175, 0.2);
         }
@@ -178,69 +184,50 @@
         }
 
         .btn-secondary {
-            background-color: #f1f5f9;
-            color: #334155;
+            background-color: var(--slate-100);
+            color: var(--slate-700);
             padding: 0.625rem 1.5rem;
             border-radius: 0.75rem;
             font-weight: 600;
             font-size: 1rem;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-card);
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .btn-secondary:hover {
-            background-color: #e2e8f0;
-            border-color: #cbd5e1;
+            background-color: var(--slate-200);
         }
 
         .spinner {
             display: inline-block;
             width: 1.25rem;
             height: 1.25rem;
-            border: 2px solid #e2e8f0;
-            border-top-color: #1e40af;
+            border: 2px solid var(--slate-200);
+            border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
         }
 
         @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(1rem);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(1rem); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
+        .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
 
-        .scale-in {
-            animation: scaleIn 0.3s ease-out;
-        }
-
+        .scale-in { animation: scaleIn 0.3s ease-out; }
         @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .button-group {
@@ -251,19 +238,14 @@
         }
 
         @media (max-width: 640px) {
-            .button-group {
-                flex-direction: column-reverse;
-            }
-
-            .btn-primary, .btn-secondary {
-                width: 100%;
-            }
+            .button-group { flex-direction: column-reverse; }
+            .btn-primary, .btn-secondary { width: 100%; }
         }
 
         .back-button {
             background: none;
             border: none;
-            color: #1e40af;
+            color: var(--primary);
             text-decoration: underline;
             font-size: 0.875rem;
             font-weight: 500;
@@ -272,64 +254,27 @@
             transition: color 0.2s;
         }
 
-        .back-button:hover {
-            color: #1e3a8a;
-        }
-
+        .back-button:hover { color: var(--primary-dark); }
+        
         .status-badge {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background-color: #fef3c7;
-            color: #b45309;
-            font-size: 0.875rem;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
             font-weight: 600;
-            border-radius: 0.375rem;
+            text-transform: uppercase;
         }
+        .status-menunggu { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .status-dipanggil { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+        .status-dilayani { background-color: rgba(124, 58, 237, 0.15); color: #7c3aed; }
+        .status-selesai { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
 
         [x-cloak] { display: none !important; }
     </style>
 </head>
 <body>
 <div layout:fragment="header-title">Antrean Birokrasi</div>
-<div layout:fragment="content" class="queue-container"
-    x-data="{
-        step: 1,
-        selectedType: '',
-        keperluan: '',
-        waktuPengajuan: '',
-        ticketResult: null,
-        loading: false,
-        async submitQueue() {
-            if(!this.selectedType || !this.keperluan || !this.waktuPengajuan) return;
-            this.loading = true;
-            try {
-                let payload = {
-                    jenisSurat: this.selectedType + ' - ' + this.keperluan,
-                    statusAntrian: 'MENUNGGU',
-                    userId: 1,
-                    kategoriId: 1
-                };
-                let res = await fetch('/api/antrean', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if(res.ok) {
-                    this.ticketResult = await res.json();
-                    this.step = 3;
-                }
-            } catch(e) {
-                console.error('Error:', e);
-                alert('Terjadi kesalahan. Silakan coba lagi.');
-            } finally {
-                this.loading = false;
-            }
-        },
-        formatDate(dateStr) {
-            if(!dateStr) return '';
-            return new Date(dateStr).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-        }
-    }">
+<div layout:fragment="content" class="queue-container" x-data="queueApp">
 
     <div class="queue-card">
 
@@ -341,16 +286,16 @@
                 </p>
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div class="step-indicator">1</div>
+                        <div class="step-indicator" :class="step === 1 ? 'active' : ''">1</div>
                         <p style="font-size: 0.875rem; font-weight: 500;">Pilih Layanan</p>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div class="step-indicator" :class="step > 1 ? 'active' : ''">2</div>
-                        <p style="font-size: 0.875rem; font-weight: 500; color: " :style="step > 1 ? 'color: white' : 'color: #94a3b8'">Lengkapi Data</p>
+                        <div class="step-indicator" :class="step === 2 ? 'active' : ''">2</div>
+                        <p style="font-size: 0.875rem; font-weight: 500;" :style="step === 2 ? 'color: white' : 'color: #cbd5e1'">Lengkapi Data</p>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div class="step-indicator" :class="step > 2 ? 'active' : ''">3</div>
-                        <p style="font-size: 0.875rem; font-weight: 500;" :style="step > 2 ? 'color: white' : 'color: #94a3b8'">Dapatkan Tiket</p>
+                        <div class="step-indicator" :class="step === 3 ? 'active' : ''">3</div>
+                        <p style="font-size: 0.875rem; font-weight: 500;" :style="step === 3 ? 'color: white' : 'color: #cbd5e1'">Dapatkan Tiket</p>
                     </div>
                 </div>
             </div>
@@ -360,38 +305,20 @@
 
             <!-- Step 1: Select Type -->
             <div x-show="step === 1" x-transition.opacity class="fade-in">
-                <h3 style="font-size: 1.125rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Pilih Jenis Layanan</h3>
+                <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--slate-800); margin-bottom: 1rem;">Pilih Jenis Layanan</h3>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <label style="display: block; cursor: pointer;">
-                        <input type="radio" name="type" value="KTP" x-model="selectedType" style="display: none;">
-                        <div class="service-option" :class="selectedType === 'KTP' ? 'selected' : ''">
-                            <div class="service-icon">KTP</div>
-                            <div>
-                                <h4 style="font-weight: 700; color: #1e293b;">Pembuatan e-KTP</h4>
-                                <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.125rem;">Perekaman baru atau perbaikan.</p>
+                    <template x-for="cat in categories" :key="cat.id">
+                        <label style="display: block; cursor: pointer;">
+                            <input type="radio" name="type" :value="cat.nama" x-model="selectedType" style="display: none;">
+                            <div class="service-option" :class="selectedType === cat.nama ? 'selected' : ''">
+                                <div class="service-icon" x-text="cat.nama.substring(0, 3).toUpperCase()">LAY</div>
+                                <div>
+                                    <h4 style="font-weight: 700; color: var(--slate-800);" x-text="cat.nama">Layanan</h4>
+                                    <p style="font-size: 0.75rem; color: var(--slate-500); margin-top: 0.125rem;" x-text="cat.deskripsi || 'Layanan terpadu'"></p>
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <label style="display: block; cursor: pointer;">
-                        <input type="radio" name="type" value="KK" x-model="selectedType" style="display: none;">
-                        <div class="service-option" :class="selectedType === 'KK' ? 'selected' : ''">
-                            <div class="service-icon">KK</div>
-                            <div>
-                                <h4 style="font-weight: 700; color: #1e293b;">Kartu Keluarga (KK)</h4>
-                                <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.125rem;">Pembuatan atau perubahan anggota.</p>
-                            </div>
-                        </div>
-                    </label>
-                    <label style="display: block; cursor: pointer;">
-                        <input type="radio" name="type" value="SURAT" x-model="selectedType" style="display: none;">
-                        <div class="service-option" :class="selectedType === 'SURAT' ? 'selected' : ''">
-                            <div class="service-icon">Srt</div>
-                            <div>
-                                <h4 style="font-weight: 700; color: #1e293b;">Surat Keterangan</h4>
-                                <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.125rem;">Domisili, Pindah, dll.</p>
-                            </div>
-                        </div>
-                    </label>
+                        </label>
+                    </template>
                 </div>
                 <div class="button-group">
                     <button @click="if(selectedType) step = 2" :disabled="!selectedType" class="btn-primary">
@@ -403,14 +330,14 @@
             <!-- Step 2: Form Detail -->
             <div x-show="step === 2" x-cloak x-transition.opacity class="fade-in">
                 <button @click="step = 1" class="back-button">← Kembali</button>
-                <h3 style="font-size: 1.125rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Lengkapi Data Pengajuan</h3>
+                <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--slate-800); margin-bottom: 1rem;">Lengkapi Data Pengajuan</h3>
                 <form>
                     <div class="form-group">
-                        <label class="form-label">Keperluan Spesifik</label>
+                        <label class="form-label" style="color: var(--slate-700);">Keperluan Spesifik</label>
                         <input type="text" x-model="keperluan" class="form-input" placeholder="Contoh: Perpanjangan KTP" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Jadwal Kedatangan</label>
+                        <label class="form-label" style="color: var(--slate-700);">Jadwal Kedatangan</label>
                         <input type="date" x-model="waktuPengajuan" class="form-input" required>
                     </div>
                 </form>
@@ -425,28 +352,122 @@
 
             <!-- Step 3: Ticket -->
             <div x-show="step === 3" x-cloak x-transition class="scale-in" style="text-align: center; padding: 1rem 0;">
-                <h3 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">Tiket Berhasil Dibuat!</h3>
-                <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 1.5rem;">Tunjukkan tiket ini saat Anda tiba di lokasi.</p>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--slate-800); margin-bottom: 0.25rem;">Tiket Berhasil Dibuat!</h3>
+                <p style="color: var(--slate-500); font-size: 0.875rem; margin-bottom: 1.5rem;">Tunjukkan nomor tiket di bawah ketika Anda berkunjung.</p>
 
                 <div class="ticket-box" x-show="ticketResult">
-                    <p style="color: #64748b; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.1em;" x-text="ticketResult?.jenisSurat"></p>
+                    <p style="color: var(--slate-500); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.1em;" x-text="ticketResult?.jenisSurat"></p>
                     <p class="ticket-number" x-text="ticketResult?.nomorAntrian"></p>
-                    <div style="text-align: left; font-size: 0.875rem; color: #475569; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(30, 64, 175, 0.2);">
+                    <div style="text-align: left; font-size: 0.875rem; color: var(--slate-700); margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-card);">
                         <div style="display: flex; justify-content: space-between;">
-                            <span style="color: #94a3b8;">Dibuat Pada:</span>
+                            <span style="color: var(--slate-400);">Dibuat Pada:</span>
                             <span style="font-weight: 500;" x-text="formatDate(ticketResult?.createdAt)"></span>
                         </div>
                     </div>
                 </div>
 
                 <div style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap;">
-                    <a href="/" class="btn-primary">Kembali ke Beranda</a>
+                    <button class="btn-primary" @click="step = 1; selectedType = ''; keperluan = ''; waktuPengajuan = ''; fetchActiveQueues()">Kembali</button>
                     <button class="btn-secondary" onclick="window.print()">Cetak Tiket</button>
                 </div>
             </div>
 
         </div>
     </div>
+
+    <!-- Active Queues list -->
+    <div class="card-modern">
+        <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--slate-800); margin-bottom: 1rem;">Daftar Antrean Anda</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <template x-for="item in myQueues" :key="item.id">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 1px solid var(--border-card); border-radius: 0.75rem; background-color: var(--bg-card);">
+                    <div>
+                        <h4 style="font-weight: 700; color: var(--slate-800); font-size: 0.95rem; margin: 0;" x-text="item.jenisSurat">KK</h4>
+                        <p style="font-size: 0.75rem; color: var(--slate-400); margin: 0.125rem 0 0 0;" x-text="formatDate(item.createdAt)">Tanggal</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span class="font-bold text-lg" x-text="item.nomorAntrian" style="color: var(--primary);">A-001</span>
+                        <span class="status-badge" :class="'status-' + item.statusAntrian.toLowerCase()" x-text="item.statusAntrian">Menunggu</span>
+                    </div>
+                </div>
+            </template>
+            <div x-show="myQueues.length === 0" class="text-center py-4" style="color: var(--slate-400);">Anda belum memiliki antrean aktif.</div>
+        </div>
+    </div>
+
 </div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('queueApp', () => ({
+                step: 1,
+                categories: [],
+                selectedType: '',
+                keperluan: '',
+                waktuPengajuan: '',
+                ticketResult: null,
+                loading: false,
+                myQueues: [],
+                currentUserId: /*[[${currentUser != null ? currentUser.id : 0}]]*/ 0,
+                init() {
+                    this.fetchCategories();
+                    this.fetchActiveQueues();
+                },
+                async fetchCategories() {
+                    try {
+                        let res = await fetch('/api/kategori-layanan');
+                        this.categories = await res.json();
+                    } catch(e) {
+                        console.error('Error categories', e);
+                    }
+                },
+                async fetchActiveQueues() {
+                    try {
+                        let res = await fetch('/api/antrean');
+                        let data = await res.json();
+                        // Filter for user
+                        this.myQueues = data.filter(q => q.userId === this.currentUserId).sort((a,b) => b.id - a.id);
+                    } catch(e) {
+                        console.error(e);
+                    }
+                },
+                async submitQueue() {
+                    if(!this.selectedType || !this.keperluan || !this.waktuPengajuan) return;
+                    this.loading = true;
+                    try {
+                        // Find matching category id
+                        let cat = this.categories.find(c => c.nama === this.selectedType);
+                        let payload = {
+                            jenisSurat: this.selectedType + ' - ' + this.keperluan,
+                            statusAntrian: 'MENUNGGU',
+                            userId: this.currentUserId,
+                            kategoriId: cat ? cat.id : 1
+                        };
+                        let res = await fetch('/api/antrean', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        let data = await res.json();
+                        if(data.success) {
+                            this.ticketResult = data.data;
+                            this.step = 3;
+                            this.$root.showToast('Antrean berhasil diajukan!');
+                        }
+                    } catch(e) {
+                        console.error('Error:', e);
+                        this.$root.showToast('Gagal mengajukan antrean.', 'danger');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                formatDate(dateStr) {
+                    if(!dateStr) return '';
+                    return new Date(dateStr).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                }
+            }));
+        });
+    </script>
+</th:block>
 </body>
 </html>

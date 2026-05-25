@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+<head>
+    <title>SatSet - Panel Admin</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .admin-section {
+            max-width: 72rem;
+            margin: 0 auto;
+            margin-top: 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+        .stat-card-admin {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+        .stat-card-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .stat-icon-wrapper {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .section-header h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--slate-800);
+            margin: 0;
+        }
+        .table-responsive {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .table-admin {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .table-admin th {
+            background-color: var(--slate-100);
+            color: var(--slate-600);
+            padding: 1rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-card);
+        }
+        .table-admin td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-card);
+            font-size: 0.875rem;
+            color: var(--slate-700);
+            vertical-align: middle;
+        }
+        .table-admin tr:last-child td {
+            border-bottom: none;
+        }
+        .badge-status {
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-diterima { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+        .badge-diproses { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .badge-selesai { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .badge-ditolak { background-color: rgba(220, 38, 38, 0.15); color: #dc2626; }
+        
+        .badge-menunggu { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .badge-dipanggil { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+        .badge-dilayani { background-color: rgba(124, 58, 237, 0.15); color: #7c3aed; }
+        
+        .btn-action {
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        .btn-action-primary { background-color: #3b82f6; color: white; }
+        .btn-action-primary:hover { background-color: #2563eb; }
+        .btn-action-success { background-color: #10b981; color: white; }
+        .btn-action-success:hover { background-color: #059669; }
+        .btn-action-danger { background-color: #dc2626; color: white; }
+        .btn-action-danger:hover { background-color: #b91c1c; }
+        .btn-action-secondary { background-color: var(--slate-100); color: var(--slate-700); border-color: var(--border-card); }
+        .btn-action-secondary:hover { background-color: var(--slate-200); }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1050;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 500px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+        .dark .table-admin th { background-color: #1e293b; color: #94a3b8; }
+        .dark .table-admin td { color: #cbd5e1; }
+    </style>
+</head>
+<body>
+<div layout:fragment="header-title">Panel Kontrol Admin</div>
+<div layout:fragment="content">
+    <div class="admin-section" x-data="adminDashboard">
+
+        <!-- Stats Section -->
+        <section class="stats-grid">
+            <div class="stat-card-admin">
+                <div class="stat-icon-wrapper" style="background-color: rgba(59, 130, 246, 0.15); color: #3b82f6;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div>
+                    <p style="font-size: 0.8125rem; font-weight: 500; color: var(--slate-400); margin: 0;">Total Pengguna</p>
+                    <h4 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: var(--slate-800);" x-text="stats.totalUsers">0</h4>
+                </div>
+            </div>
+            <div class="stat-card-admin">
+                <div class="stat-icon-wrapper" style="background-color: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div>
+                    <p style="font-size: 0.8125rem; font-weight: 500; color: var(--slate-400); margin: 0;">Laporan Masuk</p>
+                    <h4 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: var(--slate-800);" x-text="stats.totalLaporan">0</h4>
+                </div>
+            </div>
+            <div class="stat-card-admin">
+                <div class="stat-icon-wrapper" style="background-color: rgba(16, 185, 129, 0.15); color: #10b981;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+                </div>
+                <div>
+                    <p style="font-size: 0.8125rem; font-weight: 500; color: var(--slate-400); margin: 0;">Antrean Hari Ini</p>
+                    <h4 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: var(--slate-800);" x-text="stats.totalAntrean">0</h4>
+                </div>
+            </div>
+            <div class="stat-card-admin">
+                <div class="stat-icon-wrapper" style="background-color: rgba(124, 58, 237, 0.15); color: #7c3aed;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                </div>
+                <div>
+                    <p style="font-size: 0.8125rem; font-weight: 500; color: var(--slate-400); margin: 0;">Total Pengumuman</p>
+                    <h4 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: var(--slate-800);" x-text="stats.totalMading">0</h4>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts & Analytics Section -->
+        <section class="grid grid-cols-2 gap-4">
+            <div class="card-modern">
+                <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">Status Laporan Warga</h3>
+                <div style="max-height: 250px; display: flex; justify-content: center;">
+                    <canvas id="laporanChart"></canvas>
+                </div>
+            </div>
+            <div class="card-modern">
+                <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">Status Antrean Birokrasi</h3>
+                <div style="max-height: 250px; display: flex; justify-content: center;">
+                    <canvas id="antreanChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Controllers -->
+        <section class="d-flex gap-2" style="border-bottom: 1px solid var(--border-card); padding-bottom: 0.5rem;">
+            <button class="btn-action" :class="activeTab === 'laporan' ? 'btn-action-primary' : 'btn-action-secondary'" @click="activeTab = 'laporan'">Pengaduan Laporan</button>
+            <button class="btn-action" :class="activeTab === 'antrean' ? 'btn-action-primary' : 'btn-action-secondary'" @click="activeTab = 'antrean'">Antrean Aktif</button>
+            <button class="btn-action" :class="activeTab === 'mading' ? 'btn-action-primary' : 'btn-action-secondary'" @click="activeTab = 'mading'">Kelola Mading</button>
+        </section>
+
+        <!-- Laporan Table -->
+        <section x-show="activeTab === 'laporan'">
+            <div class="section-header">
+                <h3>Daftar Pengaduan Masuk</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table-admin">
+                    <thead>
+                        <tr>
+                            <th>Pelapor</th>
+                            <th>Judul Pengaduan</th>
+                            <th>Deskripsi</th>
+                            <th>Status</th>
+                            <th>Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="item in laporans" :key="item.id">
+                            <tr>
+                                <td x-text="item.pelapor ? item.pelapor.namaLengkap : 'Warga Anonim'">Warga</td>
+                                <td x-text="item.judulLaporan">Judul</td>
+                                <td x-text="item.deskripsi" class="line-clamp-2">Deskripsi</td>
+                                <td>
+                                    <span class="badge-status" :class="'badge-' + item.statusLaporan.toLowerCase()" x-text="item.statusLaporan">DITERIMA</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <button x-show="item.statusLaporan === 'DITERIMA'" @click="updateLaporanStatus(item.id, 'DIPROSES')" class="btn-action btn-action-primary">Proses</button>
+                                        <button x-show="item.statusLaporan === 'DIPROSES'" @click="updateLaporanStatus(item.id, 'SELESAI')" class="btn-action btn-action-success">Selesai</button>
+                                        <button x-show="item.statusLaporan !== 'SELESAI' && item.statusLaporan !== 'DITOLAK'" @click="updateLaporanStatus(item.id, 'DITOLAK')" class="btn-action btn-action-danger">Tolak</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr x-show="laporans.length === 0">
+                            <td colspan="5" class="text-center py-4">Tidak ada laporan masuk</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Antrean Table -->
+        <section x-show="activeTab === 'antrean'">
+            <div class="section-header">
+                <h3>Daftar Antrean Aktif</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table-admin">
+                    <thead>
+                        <tr>
+                            <th>Nomor Antrean</th>
+                            <th>Pemohon</th>
+                            <th>Jenis Layanan</th>
+                            <th>Status</th>
+                            <th>Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="item in antreans" :key="item.id">
+                            <tr>
+                                <td x-text="item.nomorAntrian" class="font-bold">A-001</td>
+                                <td x-text="item.pemohon ? item.pemohon.namaLengkap : 'Warga'">Nama</td>
+                                <td x-text="item.jenisSurat">Layanan</td>
+                                <td>
+                                    <span class="badge-status" :class="'badge-' + item.statusAntrian.toLowerCase()" x-text="item.statusAntrian">MENUNGGU</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <button x-show="item.statusAntrian === 'MENUNGGU'" @click="updateAntreanStatus(item.id, 'DIPANGGIL')" class="btn-action btn-action-primary">Panggil</button>
+                                        <button x-show="item.statusAntrian === 'DIPANGGIL'" @click="updateAntreanStatus(item.id, 'DILAYANI')" class="btn-action btn-action-success">Layani</button>
+                                        <button x-show="item.statusAntrian === 'DILAYANI'" @click="updateAntreanStatus(item.id, 'SELESAI')" class="btn-action btn-action-secondary">Selesai</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr x-show="antreans.length === 0">
+                            <td colspan="5" class="text-center py-4">Tidak ada antrean aktif saat ini</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Mading Table -->
+        <section x-show="activeTab === 'mading'">
+            <div class="section-header">
+                <h3>Kelola Mading Digital</h3>
+                <button class="btn-action btn-action-primary" @click="showMadingModal = true">Tambah Pengumuman</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table-admin">
+                    <thead>
+                        <tr>
+                            <th>Judul</th>
+                            <th>Jenis Informasi</th>
+                            <th>Status</th>
+                            <th>Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="item in madings" :key="item.id">
+                            <tr>
+                                <td x-text="item.judul">Judul</td>
+                                <td x-text="item.jenisInformasi">Jenis</td>
+                                <td>
+                                    <span class="badge-status" :class="item.isPublished ? 'badge-selesai' : 'badge-secondary'" x-text="item.isPublished ? 'Published' : 'Draft'">Published</span>
+                                </td>
+                                <td>
+                                    <button @click="deleteMading(item.id)" class="btn-action btn-action-danger">Hapus</button>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr x-show="madings.length === 0">
+                            <td colspan="4" class="text-center py-4">Belum ada mading terbit</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Mading Modal -->
+        <div x-show="showMadingModal" x-cloak class="modal-overlay">
+            <div class="modal-card" @click.outside="showMadingModal = false">
+                <h3 style="font-weight: 700; margin-bottom: 1.25rem;">Buat Mading Baru</h3>
+                <div class="form-group">
+                    <label>Judul Pengumuman</label>
+                    <input type="text" x-model="newMading.judul" placeholder="Masukkan judul..." style="background-color: var(--slate-50); border: 1px solid var(--border-card); color: var(--slate-800);">
+                </div>
+                <div class="form-group mt-2">
+                    <label>Kategori</label>
+                    <select x-model="newMading.jenisInformasi" style="background-color: var(--slate-50); border: 1px solid var(--border-card); color: var(--slate-800);">
+                        <option value="PENTING">Penting</option>
+                        <option value="INFO_WARGA">Info Warga</option>
+                        <option value="PENGUMUMAN">Pengumuman</option>
+                    </select>
+                </div>
+                <div class="form-group mt-2">
+                    <label>Konten Informasi</label>
+                    <textarea x-model="newMading.konten" rows="4" placeholder="Tulis pengumuman lengkap..." style="background-color: var(--slate-50); border: 1px solid var(--border-card); color: var(--slate-800);"></textarea>
+                </div>
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button class="btn-action btn-action-secondary" @click="showMadingModal = false">Batal</button>
+                    <button class="btn-action btn-action-primary" @click="saveMading">Simpan & Terbitkan</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('adminDashboard', () => ({
+                activeTab: 'laporan',
+                stats: {},
+                laporans: [],
+                antreans: [],
+                madings: [],
+                showMadingModal: false,
+                newMading: { judul: '', konten: '', jenisInformasi: 'PENGUMUMAN', isPublished: true },
+                laporanChartInstance: null,
+                antreanChartInstance: null,
+                init() {
+                    this.loadDashboardData();
+                },
+                async loadDashboardData() {
+                    try {
+                        let resStats = await fetch('/api/dashboard/stats');
+                        let dataStats = await resStats.json();
+                        if (dataStats.success) this.stats = dataStats.data;
+
+                        let resLaporan = await fetch('/api/laporan');
+                        this.laporans = await resLaporan.json();
+
+                        let resAntrean = await fetch('/api/antrean');
+                        this.antreans = await resAntrean.json();
+
+                        let resMading = await fetch('/api/mading/all');
+                        this.madings = await resMading.json();
+
+                        this.initCharts();
+                    } catch (e) {
+                        console.error('Gagal load dashboard', e);
+                    }
+                },
+                initCharts() {
+                    const ctxLaporan = document.getElementById('laporanChart');
+                    const ctxAntrean = document.getElementById('antreanChart');
+
+                    if (this.laporanChartInstance) this.laporanChartInstance.destroy();
+                    if (this.antreanChartInstance) this.antreanChartInstance.destroy();
+
+                    this.laporanChartInstance = new Chart(ctxLaporan, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Diterima', 'Diproses', 'Selesai', 'Ditolak'],
+                            datasets: [{
+                                data: [this.stats.laporanDiterima, this.stats.laporanDiproses, this.stats.laporanSelesai, this.stats.laporanDitolak],
+                                backgroundColor: ['#3b82f6', '#f59e0b', '#10b981', '#dc2626']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: { legend: { position: 'bottom' } }
+                        }
+                    });
+
+                    this.antreanChartInstance = new Chart(ctxAntrean, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Menunggu', 'Dipanggil', 'Dilayani', 'Selesai'],
+                            datasets: [{
+                                label: 'Jumlah Antrean',
+                                data: [this.stats.antreanMenunggu, 0, 0, this.stats.antreanSelesai], // Menyesuaikan enum status
+                                backgroundColor: ['#f59e0b', '#3b82f6', '#7c3aed', '#10b981']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: { legend: { display: false } },
+                            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                        }
+                    });
+                },
+                async updateLaporanStatus(id, status) {
+                    try {
+                        let res = await fetch(`/api/laporan/${id}/status`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ status })
+                        });
+                        let data = await res.json();
+                        if (data.success) {
+                            // Kirim notifikasi otomatis ke user
+                            let lap = this.laporans.find(l => l.id === id);
+                            if(lap) {
+                                await fetch('/api/notifikasi', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ 
+                                        pesan: `Laporan Anda "${lap.judulLaporan}" statusnya kini: ${status}`,
+                                        user: { id: lap.userId }
+                                    })
+                                });
+                            }
+                            this.$root.showToast(`Laporan berhasil di-update ke ${status}`);
+                            this.loadDashboardData();
+                        }
+                    } catch(e) {
+                        this.$root.showToast('Gagal update status', 'danger');
+                    }
+                },
+                async updateAntreanStatus(id, status) {
+                    try {
+                        let res = await fetch(`/api/antrean/${id}/status`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ status })
+                        });
+                        let data = await res.json();
+                        if (data.success) {
+                            let ant = this.antreans.find(a => a.id === id);
+                            if(ant) {
+                                await fetch('/api/notifikasi', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ 
+                                        pesan: `Antrean Anda ${ant.nomorAntrian} statusnya kini: ${status}`,
+                                        user: { id: ant.userId }
+                                    })
+                                });
+                            }
+                            this.$root.showToast(`Antrean berhasil di-update ke ${status}`);
+                            this.loadDashboardData();
+                        }
+                    } catch(e) {
+                        this.$root.showToast('Gagal update status', 'danger');
+                    }
+                },
+                async saveMading() {
+                    try {
+                        let res = await fetch('/api/mading', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(this.newMading)
+                        });
+                        let data = await res.json();
+                        if (data.success) {
+                            this.$root.showToast('Mading baru berhasil diterbitkan');
+                            this.showMadingModal = false;
+                            this.newMading = { judul: '', konten: '', jenisInformasi: 'PENGUMUMAN', isPublished: true };
+                            this.loadDashboardData();
+                        }
+                    } catch(e) {
+                        this.$root.showToast('Gagal terbitkan mading', 'danger');
+                    }
+                },
+                async deleteMading(id) {
+                    if (!confirm('Hapus mading ini?')) return;
+                    try {
+                        let res = await fetch(`/api/mading/${id}`, { method: 'DELETE' });
+                        let data = await res.json();
+                        if (data.success) {
+                            this.$root.showToast('Mading berhasil dihapus');
+                            this.loadDashboardData();
+                        }
+                    } catch(e) {
+                        this.$root.showToast('Gagal hapus mading', 'danger');
+                    }
+                }
+            }));
+        });
+    </script>
+</th:block>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.kelompok4.satset.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -25,6 +26,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String username;
     
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
     
@@ -33,5 +35,10 @@ public class User extends BaseEntity {
     
     @Column(nullable = false)
     private String role;
-}
 
+    @Column(name = "no_telepon")
+    private String noTelepon;
+
+    @Column
+    private String alamat;
+}
