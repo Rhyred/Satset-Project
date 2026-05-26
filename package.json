@@ -4,8 +4,8 @@
   "description": "Sistem Administrasi Terpadu & Sentralisasi Elektronik",
   "main": "index.js",
   "scripts": {
-    "dev": "./mvnw spring-boot:run",
-    "build": "./mvnw clean compile"
+    "dev": "node run-mvnw.js spring-boot:run",
+    "build": "node run-mvnw.js clean compile"
   },
   "keywords": [],
   "author": "",
