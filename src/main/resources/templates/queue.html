@@ -2,156 +2,472 @@
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
 <head>
     <title>SatSet - Antrean Birokrasi</title>
+    <style>
+        .queue-container {
+            max-width: 60rem;
+            margin: 0 auto;
+            margin-top: 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .queue-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-card);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: slideInUp 0.4s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .queue-card {
+                flex-direction: row;
+            }
+        }
+
+        .queue-sidebar {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 2rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        @media (min-width: 768px) {
+            .queue-sidebar {
+                width: 40%;
+            }
+        }
+
+        .queue-content {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        @media (min-width: 768px) {
+            .queue-content {
+                width: 60%;
+            }
+        }
+
+        .step-indicator {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator.active {
+            background-color: white;
+            color: #0f172a;
+            transform: scale(1.1);
+        }
+
+        .service-option {
+            padding: 1rem;
+            border: 2px solid var(--border-card);
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            background: var(--bg-card);
+        }
+
+        .service-option:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .service-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .service-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: var(--slate-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.875rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .ticket-box {
+            border: 2px dashed var(--primary);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            background-color: rgba(30, 64, 175, 0.05);
+            text-align: center;
+            max-width: 24rem;
+            margin: 0 auto;
+        }
+
+        .ticket-number {
+            font-size: 3.75rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 1rem 0;
+            letter-spacing: -0.02em;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--slate-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-card);
+            border-radius: 0.75rem;
+            font-family: inherit;
+            font-size: 1rem;
+            background-color: var(--bg-card);
+            color: var(--slate-800);
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.625rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(30, 64, 175, 0.2);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: var(--slate-100);
+            color: var(--slate-700);
+            padding: 0.625rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 1px solid var(--border-card);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--slate-200);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid var(--slate-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(1rem); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .scale-in { animation: scaleIn 0.3s ease-out; }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .button-group { flex-direction: column-reverse; }
+            .btn-primary, .btn-secondary { width: 100%; }
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            text-decoration: underline;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: color 0.2s;
+        }
+
+        .back-button:hover { color: var(--primary-dark); }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-menunggu { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .status-dipanggil { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+        .status-dilayani { background-color: rgba(124, 58, 237, 0.15); color: #7c3aed; }
+        .status-selesai { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
+
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 <body>
 <div layout:fragment="header-title">Antrean Birokrasi</div>
-<div layout:fragment="content" class="max-w-4xl mx-auto space-y-6 pb-10" x-data="{ step: 1, selectedType: '' }">
-    
-    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col md:flex-row">
-        
-        <!-- Left Side: Information -->
-        <div class="bg-gradient-to-br from-slate-900 to-slate-800 p-8 md:w-2/5 text-white flex flex-col justify-between">
+<div layout:fragment="content" class="queue-container" x-data="queueApp">
+
+    <div class="queue-card">
+
+        <div class="queue-sidebar">
             <div>
-                <h2 class="text-2xl font-bold mb-4">Pengajuan<br/>Administrasi</h2>
-                <p class="text-slate-300 text-sm leading-relaxed mb-8">
+                <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Pengajuan<br/>Administrasi</h2>
+                <p style="color: #cbd5e1; font-size: 0.875rem; line-height: 1.6; margin-bottom: 2rem;">
                     Ambil nomor antrean digital untuk layanan kependudukan dan perizinan. Anda akan mendapat estimasi waktu layanan.
                 </p>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold">1</div>
-                        <p class="text-sm font-medium">Pilih Layanan</p>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="step-indicator" :class="step === 1 ? 'active' : ''">1</div>
+                        <p style="font-size: 0.875rem; font-weight: 500;">Pilih Layanan</p>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold" :class="step > 1 ? 'bg-white text-slate-900' : ''">2</div>
-                        <p class="text-sm font-medium" :class="step > 1 ? 'text-white' : 'text-slate-400'">Lengkapi Data</p>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="step-indicator" :class="step === 2 ? 'active' : ''">2</div>
+                        <p style="font-size: 0.875rem; font-weight: 500;" :style="step === 2 ? 'color: white' : 'color: #cbd5e1'">Lengkapi Data</p>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold" :class="step > 2 ? 'bg-white text-slate-900' : ''">3</div>
-                        <p class="text-sm font-medium" :class="step > 2 ? 'text-white' : 'text-slate-400'">Dapatkan Tiket</p>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="step-indicator" :class="step === 3 ? 'active' : ''">3</div>
+                        <p style="font-size: 0.875rem; font-weight: 500;" :style="step === 3 ? 'color: white' : 'color: #cbd5e1'">Dapatkan Tiket</p>
                     </div>
                 </div>
-            </div>
-            
-            <div class="mt-8 pt-6 border-t border-white/10">
-                <p class="text-xs text-slate-400">Jam Operasional Pelayanan:<br/>Senin - Jumat, 08:00 - 15:00 WIB</p>
             </div>
         </div>
 
-        <!-- Right Side: Form Content -->
-        <div class="p-8 md:w-3/5">
-            
+        <div class="queue-content">
+
             <!-- Step 1: Select Type -->
-            <div x-show="step === 1" x-transition.opacity>
-                <h3 class="text-lg font-bold text-slate-800 mb-4">Pilih Jenis Layanan</h3>
-                <div class="space-y-3">
-                    <label class="block cursor-pointer">
-                        <input type="radio" name="type" value="KTP" x-model="selectedType" class="peer sr-only">
-                        <div class="p-4 border-2 border-slate-200 rounded-xl peer-checked:border-primary peer-checked:bg-blue-50 transition-all flex items-center gap-4 hover:border-slate-300">
-                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary shadow-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <div x-show="step === 1" x-transition.opacity class="fade-in">
+                <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--slate-800); margin-bottom: 1rem;">Pilih Jenis Layanan</h3>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <template x-for="cat in categories" :key="cat.id">
+                        <label style="display: block; cursor: pointer;">
+                            <input type="radio" name="type" :value="cat.nama" x-model="selectedType" style="display: none;">
+                            <div class="service-option" :class="selectedType === cat.nama ? 'selected' : ''">
+                                <div class="service-icon" x-text="cat.nama.substring(0, 3).toUpperCase()">LAY</div>
+                                <div>
+                                    <h4 style="font-weight: 700; color: var(--slate-800);" x-text="cat.nama">Layanan</h4>
+                                    <p style="font-size: 0.75rem; color: var(--slate-500); margin-top: 0.125rem;" x-text="cat.deskripsi || 'Layanan terpadu'"></p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800">Pembuatan e-KTP</h4>
-                                <p class="text-xs text-slate-500 mt-0.5">Perekaman baru atau perbaikan KTP hilang/rusak.</p>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="block cursor-pointer">
-                        <input type="radio" name="type" value="KK" x-model="selectedType" class="peer sr-only">
-                        <div class="p-4 border-2 border-slate-200 rounded-xl peer-checked:border-primary peer-checked:bg-blue-50 transition-all flex items-center gap-4 hover:border-slate-300">
-                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary shadow-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800">Kartu Keluarga (KK)</h4>
-                                <p class="text-xs text-slate-500 mt-0.5">Pembuatan KK baru, tambah/kurang anggota.</p>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="block cursor-pointer">
-                        <input type="radio" name="type" value="SURAT" x-model="selectedType" class="peer sr-only">
-                        <div class="p-4 border-2 border-slate-200 rounded-xl peer-checked:border-primary peer-checked:bg-blue-50 transition-all flex items-center gap-4 hover:border-slate-300">
-                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary shadow-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800">Surat Keterangan</h4>
-                                <p class="text-xs text-slate-500 mt-0.5">SKCK, Surat Domisili, Surat Pindah.</p>
-                            </div>
-                        </div>
-                    </label>
+                        </label>
+                    </template>
                 </div>
-                <div class="mt-6 flex justify-end">
-                    <button @click="if(selectedType) step = 2" :disabled="!selectedType" class="bg-primary hover:bg-blue-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-6 rounded-xl transition-colors">
+                <div class="button-group">
+                    <button @click="if(selectedType) step = 2" :disabled="!selectedType" class="btn-primary">
                         Lanjut
                     </button>
                 </div>
             </div>
 
             <!-- Step 2: Form Detail -->
-            <div x-show="step === 2" x-cloak x-transition.opacity>
-                <div class="flex items-center gap-2 mb-4 text-primary">
-                    <button @click="step = 1" class="hover:underline text-sm font-medium flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                        Kembali
-                    </button>
-                </div>
-                <h3 class="text-lg font-bold text-slate-800 mb-4">Lengkapi Data Pengajuan</h3>
-                <form class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Keperluan Spesifik</label>
-                        <input type="text" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="Contoh: Perpanjangan KTP">
+            <div x-show="step === 2" x-cloak x-transition.opacity class="fade-in">
+                <button @click="step = 1" class="back-button">← Kembali</button>
+                <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--slate-800); margin-bottom: 1rem;">Lengkapi Data Pengajuan</h3>
+                <form>
+                    <div class="form-group">
+                        <label class="form-label" style="color: var(--slate-700);">Keperluan Spesifik</label>
+                        <input type="text" x-model="keperluan" class="form-input" placeholder="Contoh: Perpanjangan KTP" required>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Jadwal Kedatangan</label>
-                        <input type="date" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-slate-700">
-                    </div>
-                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 mt-4">
-                        <p class="text-xs text-blue-800 font-medium leading-relaxed">
-                            Pastikan Anda membawa dokumen persyaratan fisik (seperti KK asli/fotokopi) saat datang ke kantor pelayanan sesuai jadwal yang dipilih.
-                        </p>
+                    <div class="form-group">
+                        <label class="form-label" style="color: var(--slate-700);">Jadwal Kedatangan</label>
+                        <input type="date" x-model="waktuPengajuan" class="form-input" required>
                     </div>
                 </form>
-                <div class="mt-6 flex justify-end">
-                    <button @click="step = 3" class="bg-primary hover:bg-blue-800 text-white font-semibold py-2.5 px-6 rounded-xl transition-colors">
-                        Ajukan Antrean
+                <div class="button-group">
+                    <button @click="step = 1" class="btn-secondary">Batal</button>
+                    <button @click="submitQueue" :disabled="loading || !keperluan || !waktuPengajuan" class="btn-primary" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span x-show="!loading">Ajukan Antrean</span>
+                        <span x-show="loading" style="display: flex; align-items: center; gap: 0.5rem;"><span class="spinner"></span> Memproses...</span>
                     </button>
                 </div>
             </div>
 
             <!-- Step 3: Ticket -->
-            <div x-show="step === 3" x-cloak x-transition.opacity class="text-center py-4">
-                <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                </div>
-                <h3 class="text-xl font-bold text-slate-800 mb-1">Tiket Berhasil Dibuat!</h3>
-                <p class="text-slate-500 text-sm mb-6">Tunjukkan tiket ini saat Anda tiba di lokasi pelayanan.</p>
-                
-                <div class="border-2 border-dashed border-slate-300 rounded-2xl p-6 bg-slate-50 relative mx-auto max-w-sm">
-                    <div class="absolute -left-3 top-1/2 -mt-3 w-6 h-6 bg-white rounded-full border-r-2 border-dashed border-slate-300"></div>
-                    <div class="absolute -right-3 top-1/2 -mt-3 w-6 h-6 bg-white rounded-full border-l-2 border-dashed border-slate-300"></div>
-                    
-                    <p class="text-slate-500 text-sm font-medium mb-1 uppercase tracking-wider" x-text="selectedType"></p>
-                    <p class="text-5xl font-black text-primary mb-4 tracking-tighter">A-024</p>
-                    <div class="text-left text-sm text-slate-600 space-y-1 pt-4 border-t border-slate-200">
-                        <div class="flex justify-between">
-                            <span class="text-slate-400">Tanggal:</span>
-                            <span class="font-medium">19 Mei 2026</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-slate-400">Estimasi Dilayani:</span>
-                            <span class="font-medium">09:30 WIB</span>
+            <div x-show="step === 3" x-cloak x-transition class="scale-in" style="text-align: center; padding: 1rem 0;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--slate-800); margin-bottom: 0.25rem;">Tiket Berhasil Dibuat!</h3>
+                <p style="color: var(--slate-500); font-size: 0.875rem; margin-bottom: 1.5rem;">Tunjukkan nomor tiket di bawah ketika Anda berkunjung.</p>
+
+                <div class="ticket-box" x-show="ticketResult">
+                    <p style="color: var(--slate-500); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.1em;" x-text="ticketResult?.jenisSurat"></p>
+                    <p class="ticket-number" x-text="ticketResult?.nomorAntrian"></p>
+                    <div style="text-align: left; font-size: 0.875rem; color: var(--slate-700); margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-card);">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--slate-400);">Dibuat Pada:</span>
+                            <span style="font-weight: 500;" x-text="formatDate(ticketResult?.createdAt)"></span>
                         </div>
                     </div>
                 </div>
-                
-                <div class="mt-8">
-                    <a href="/" class="text-sm font-semibold text-primary hover:underline">Kembali ke Beranda</a>
+
+                <div style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap;">
+                    <button class="btn-primary" @click="step = 1; selectedType = ''; keperluan = ''; waktuPengajuan = ''; fetchActiveQueues()">Kembali</button>
+                    <button class="btn-secondary" onclick="window.print()">Cetak Tiket</button>
                 </div>
             </div>
 
         </div>
     </div>
+
+    <!-- Active Queues list -->
+    <div class="card-modern">
+        <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--slate-800); margin-bottom: 1rem;">Daftar Antrean Anda</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <template x-for="item in myQueues" :key="item.id">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 1px solid var(--border-card); border-radius: 0.75rem; background-color: var(--bg-card);">
+                    <div>
+                        <h4 style="font-weight: 700; color: var(--slate-800); font-size: 0.95rem; margin: 0;" x-text="item.jenisSurat">KK</h4>
+                        <p style="font-size: 0.75rem; color: var(--slate-400); margin: 0.125rem 0 0 0;" x-text="formatDate(item.createdAt)">Tanggal</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span class="font-bold text-lg" x-text="item.nomorAntrian" style="color: var(--primary);">A-001</span>
+                        <span class="status-badge" :class="'status-' + item.statusAntrian.toLowerCase()" x-text="item.statusAntrian">Menunggu</span>
+                    </div>
+                </div>
+            </template>
+            <div x-show="myQueues.length === 0" class="text-center py-4" style="color: var(--slate-400);">Anda belum memiliki antrean aktif.</div>
+        </div>
+    </div>
+
 </div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('queueApp', () => ({
+                step: 1,
+                categories: [],
+                selectedType: '',
+                keperluan: '',
+                waktuPengajuan: '',
+                ticketResult: null,
+                loading: false,
+                myQueues: [],
+                currentUserId: /*[[${currentUser != null ? currentUser.id : 0}]]*/ 0,
+                init() {
+                    this.fetchCategories();
+                    this.fetchActiveQueues();
+                },
+                async fetchCategories() {
+                    try {
+                        let res = await fetch('/api/kategori-layanan');
+                        this.categories = await res.json();
+                    } catch(e) {
+                        console.error('Error categories', e);
+                    }
+                },
+                async fetchActiveQueues() {
+                    try {
+                        let res = await fetch('/api/antrean');
+                        let data = await res.json();
+                        // Filter for user
+                        this.myQueues = data.filter(q => q.userId === this.currentUserId).sort((a,b) => b.id - a.id);
+                    } catch(e) {
+                        console.error(e);
+                    }
+                },
+                async submitQueue() {
+                    if(!this.selectedType || !this.keperluan || !this.waktuPengajuan) return;
+                    this.loading = true;
+                    try {
+                        // Find matching category id
+                        let cat = this.categories.find(c => c.nama === this.selectedType);
+                        let payload = {
+                            jenisSurat: this.selectedType + ' - ' + this.keperluan,
+                            statusAntrian: 'MENUNGGU',
+                            userId: this.currentUserId,
+                            kategoriId: cat ? cat.id : 1
+                        };
+                        let res = await fetch('/api/antrean', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        let data = await res.json();
+                        if(data.success) {
+                            this.ticketResult = data.data;
+                            this.step = 3;
+                            this.$root.showToast('Antrean berhasil diajukan!');
+                        }
+                    } catch(e) {
+                        console.error('Error:', e);
+                        this.$root.showToast('Gagal mengajukan antrean.', 'danger');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                formatDate(dateStr) {
+                    if(!dateStr) return '';
+                    return new Date(dateStr).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                }
+            }));
+        });
+    </script>
+</th:block>
 </body>
 </html>
