@@ -14,7 +14,7 @@ release.properties
 
 # Documentation
 HELP.md
-
+dokumentasi_screen_springboot_debian.md
 ### Spring Boot ###
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -119,4 +119,9 @@ out/
 
 .env
 src/main/resources/application.properties
-target/classes/application.properties
+target/classes/application.properties.
+
+.github
+.codex
+.agents
+.m2
