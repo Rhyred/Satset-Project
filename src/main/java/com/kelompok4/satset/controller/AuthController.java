@@ -1,4 +1,4 @@
-package com.kelompok4.satset.controller;
+package com.satset.app.controller; // SUSAHKAN nama package ini dengan project kelompokmu
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
