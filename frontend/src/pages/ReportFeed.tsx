@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { FileText, Plus, X, MessageSquare, Search, Filter, CheckCircle2, Circle, AlertCircle, Activity, Printer } from 'lucide-react';
-import { Laporan, KategoriLayanan, TindakLanjutLaporan } from '../types';
+import { FileText, Plus, X, MessageSquare, Search, AlertCircle, Activity, Printer } from 'lucide-react';
+import { Laporan, KategoriLayanan, TindakLanjutLaporan, TimelineEvent } from '../types';
 import { EmptyState } from '../components/EmptyState';
 import { ServiceTimeline } from '../components/ServiceTimeline';
 
