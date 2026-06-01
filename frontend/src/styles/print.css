@@ -1,0 +1,62 @@
+/* ==========================================================================
+   PRINT STYLES FOR SATSET V7 (PDF EXPORT & TICKET PRINTING)
+   ========================================================================== */
+
+@media print {
+  /* Hide all UI elements, navigations, and buttons */
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .no-print, nav, header, .bottom-nav, button, .btn, .modal-overlay, .tabs {
+    display: none !important;
+  }
+
+  /* Specific resets */
+  .page-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+    break-inside: avoid;
+    margin-bottom: 20px !important;
+  }
+
+  /* Show only the print container */
+  .print-only {
+    display: block !important;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Ensure text is black for sharp printing */
+  * {
+    color: #000 !important;
+    text-shadow: none !important;
+    background: transparent !important;
+  }
+  
+  /* Preserve specific background colors using -webkit-print-color-adjust */
+  .badge, .card-header, .print-preserve-bg {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    margin: 1.5cm;
+    size: A4 portrait;
+  }
+}
+
+/* Hide print templates on screen */
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+}

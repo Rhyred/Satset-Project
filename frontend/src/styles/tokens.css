@@ -1,0 +1,103 @@
+/* ===== SATSET V4 — GovTech Design Tokens ===== */
+:root {
+  /* Primary - Royal Blue (Digital Public Trust) */
+  --primary: #0A52CC;
+  --primary-hover: #0842A8;
+  --primary-subtle: #E6F0FF;
+  --primary-text: #ffffff;
+
+  /* Accent - Accessible Red/Crimson */
+  --accent: #D32F2F;
+  --accent-hover: #C62828;
+  --accent-subtle: #FFEBEE;
+
+  /* Surfaces */
+  --surface-0: #ffffff;
+  --surface-1: #F9FAFB;
+  --surface-2: #ffffff;
+  --surface-3: #F3F4F6;
+
+  /* Borders */
+  --border: #D1D5DB;
+  --border-hover: #9CA3AF;
+
+  /* Text - High Contrast */
+  --text-primary: #111827;
+  --text-secondary: #1F2937;
+  --text-tertiary: #4B5563;
+  --text-inverse: #ffffff;
+
+  /* Status / Semantic Colors */
+  --success: #057A55;
+  --success-subtle: #DEF7EC;
+  --warning: #C27803;
+  --warning-subtle: #FDF6B2;
+  --error: #E02424;
+  --error-subtle: #FDE8E8;
+  --info: #1A56DB;
+  --info-subtle: #E1EFFE;
+
+  /* Shadows - Flatter, more structured */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* Radius - Professional, not too bubbly */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* Motion (Functional transitions) */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+  --easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --easing-out: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Layout & Touch Targets */
+  --nav-width: 260px;
+  --nav-collapsed: 72px;
+  --header-height: 64px;
+  --bottom-nav-height: 72px;
+}
+
+/* ===== Dark Mode - Accessible & Readable ===== */
+.dark {
+  /* Lighter blue for dark mode visibility */
+  --primary: #3B82F6;
+  --primary-hover: #60A5FA;
+  --primary-subtle: rgba(59, 130, 246, 0.15);
+
+  --accent: #F87171;
+  --accent-hover: #FCA5A5;
+  --accent-subtle: rgba(248, 113, 113, 0.15);
+
+  /* Solid dark grays, not glassmorphism */
+  --surface-0: #111827;
+  --surface-1: #1F2937;
+  --surface-2: #374151;
+  --surface-3: #4B5563;
+
+  --border: #4B5563;
+  --border-hover: #6B7280;
+
+  /* Text - Pure white for max contrast */
+  --text-primary: #F9FAFB;
+  --text-secondary: #E5E7EB;
+  --text-tertiary: #D1D5DB;
+
+  --success: #31C48D;
+  --success-subtle: rgba(49, 196, 141, 0.15);
+  --warning: #FACA15;
+  --warning-subtle: rgba(250, 202, 21, 0.15);
+  --error: #F98080;
+  --error-subtle: rgba(249, 128, 128, 0.15);
+  --info: #60A5FA;
+  --info-subtle: rgba(96, 165, 250, 0.15);
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.6);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.7);
+}
