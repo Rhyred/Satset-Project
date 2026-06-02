@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    @apply bg-slate-100 text-slate-950 antialiased;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply m-0 min-h-screen bg-slate-100 font-sans text-slate-900 dark:bg-slate-950 dark:text-slate-50;
+  }
+
+  #root {
+    @apply min-h-screen;
+  }
+
+  * {
+    @apply border-slate-200 dark:border-slate-800;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+}
+
+@layer components {
+  .app-shell {
+    @apply min-h-screen bg-slate-100 dark:bg-slate-950;
+  }
+
+  .surface {
+    @apply rounded-lg border border-slate-200 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900;
+  }
+
+  .surface-muted {
+    @apply rounded-lg border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900/70;
+  }
+
+  .page-section {
+    @apply flex flex-col gap-6;
+  }
+
+  .field-label {
+    @apply mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400;
+  }
+
+  .field-input {
+    @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50 dark:focus:ring-primary-900;
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "satset-project",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Sistem Administrasi Terpadu & Sentralisasi Elektronik",
   "main": "index.js",
   "scripts": {
