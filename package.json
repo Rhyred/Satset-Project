@@ -11,3 +11,21 @@
   "author": "",
   "license": "ISC"
 }
+
+{
+  "name": "satset-project",
+  "version": "1.0.0",
+  "description": "Sistem Administrasi Terpadu & Sentralisasi Elektronik",
+  "main": "index.js",
+  "scripts": {
+    "dev:backend": "node run-mvnw.js spring-boot:run",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "node run-mvnw.js clean package -DskipTests",
+    "build": "npm run build:frontend && npm run build:backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
