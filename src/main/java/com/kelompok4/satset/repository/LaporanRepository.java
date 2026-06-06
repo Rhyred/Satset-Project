@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface LaporanRepository extends JpaRepository<Laporan, Long> {
     List<Laporan> findByStatusLaporan(String statusLaporan);
+    List<Laporan> findByUserIdOrderByCreatedAtDesc(Long userId);
+    List<Laporan> findAllByOrderByCreatedAtDesc();
+    long countByStatusLaporan(String statusLaporan);
 }

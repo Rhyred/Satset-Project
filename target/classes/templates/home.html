@@ -35,8 +35,8 @@
         }
 
         .stat-card {
-            background: white;
-            border: 1px solid #e2e8f0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
             border-radius: 1rem;
             padding: 1.25rem;
             display: flex;
@@ -62,8 +62,8 @@
         }
 
         .service-card {
-            background: white;
-            border: 1px solid #e2e8f0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
             border-radius: 1rem;
             padding: 1.25rem;
             text-decoration: none;
@@ -123,7 +123,7 @@
 
         .news-item {
             padding: 1rem;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--border-card);
             text-decoration: none;
             color: inherit;
             display: block;
@@ -135,7 +135,7 @@
         }
 
         .news-item:hover {
-            background-color: #f8fafc;
+            background-color: var(--slate-100);
         }
 
         .news-item:hover h4 {
@@ -145,7 +145,7 @@
         .badge-red {
             display: inline-block;
             padding: 0.25rem 0.5rem;
-            background-color: #fee2e2;
+            background-color: rgba(220, 38, 38, 0.15);
             color: #dc2626;
             font-size: 0.75rem;
             font-weight: 600;
@@ -156,7 +156,7 @@
         .badge-blue {
             display: inline-block;
             padding: 0.25rem 0.5rem;
-            background-color: #dbeafe;
+            background-color: rgba(59, 130, 246, 0.15);
             color: #2563eb;
             font-size: 0.75rem;
             font-weight: 600;
@@ -192,38 +192,22 @@
         }
 
         @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-1rem);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-1rem); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(1rem);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(1rem); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes ping {
-            75%, 100% {
-                transform: scale(2);
-                opacity: 0;
-            }
+            75%, 100% { transform: scale(2); opacity: 0; }
         }
 
         @media (max-width: 768px) {
             .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
             .service-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1rem; }
-            .mading-section { display: block; }
         }
 
         @media (min-width: 768px) {
@@ -242,16 +226,17 @@
         }
 
         .news-box {
-            background-color: white;
+            background-color: var(--bg-card);
             border-radius: 1rem;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-card);
+            overflow: hidden;
         }
     </style>
 </head>
 <body>
 <div layout:fragment="header-title">Beranda</div>
 <div layout:fragment="content">
-    <div class="content-section">
+    <div class="content-section" x-data="homeApp">
 
         <!-- Hero Section -->
         <section class="hero-gradient">
@@ -281,7 +266,6 @@
                     </a>
                 </div>
             </div>
-            <!-- Decorative shape -->
             <div style="position: absolute; bottom: -6rem; right: -6rem; opacity: 0.2; pointer-events: none; z-index: 0;">
                 <svg style="width: 24rem; height: 24rem; transform: rotate(45deg); stroke: white; stroke-width: 0.5; fill: none;" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
@@ -289,48 +273,48 @@
             </div>
         </section>
 
-        <!-- Stats Section -->
+        <!-- Dynamic Stats Section -->
         <section class="stat-grid">
             <div class="stat-card">
                 <div class="stat-icon" style="background-color: #dcfce7; color: #059669;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                 </div>
-                <p style="font-size: 0.875rem; font-weight: 500; color: #64748b;">Laporan Selesai</p>
-                <p style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-top: 0.25rem;">1,248</p>
-                <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem;">Bulan ini</p>
+                <p style="font-size: 0.875rem; font-weight: 500; color: var(--slate-400);">Laporan Selesai</p>
+                <p style="font-size: 1.5rem; font-weight: 700; color: var(--slate-800); margin-top: 0.25rem;" x-text="stats.laporanSelesai || 0">0</p>
+                <p style="font-size: 0.75rem; color: var(--slate-400); margin-top: 0.5rem;">Selesai diproses</p>
             </div>
 
             <div class="stat-card">
                 <div class="stat-icon" style="background-color: #dbeafe; color: #2563eb;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 </div>
-                <p style="font-size: 0.875rem; font-weight: 500; color: #64748b;">Antrean Aktif</p>
-                <p style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-top: 0.25rem;">42</p>
-                <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem;">Hari ini</p>
+                <p style="font-size: 0.875rem; font-weight: 500; color: var(--slate-400);">Antrean Menunggu</p>
+                <p style="font-size: 1.5rem; font-weight: 700; color: var(--slate-800); margin-top: 0.25rem;" x-text="stats.antreanMenunggu || 0">0</p>
+                <p style="font-size: 0.75rem; color: var(--slate-400); margin-top: 0.5rem;">Antrean aktif</p>
             </div>
 
             <div class="stat-card">
                 <div class="stat-icon" style="background-color: #fef3c7; color: #d97706;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 </div>
-                <p style="font-size: 0.875rem; font-weight: 500; color: #64748b;">Tingkat Kepuasan</p>
-                <p style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-top: 0.25rem;">4.8<span style="font-size: 0.875rem; font-weight: 400; color: #64748b; margin-left: 0.25rem;">/ 5.0</span></p>
-                <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem;">Rating</p>
+                <p style="font-size: 0.875rem; font-weight: 500; color: var(--slate-400);">Laporan Diproses</p>
+                <p style="font-size: 1.5rem; font-weight: 700; color: var(--slate-800); margin-top: 0.25rem;" x-text="stats.laporanDiproses || 0">0</p>
+                <p style="font-size: 0.75rem; color: var(--slate-400); margin-top: 0.5rem;">Sedang ditangani</p>
             </div>
 
             <div class="stat-card">
                 <div class="stat-icon" style="background-color: #e9d5ff; color: #7c3aed;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 </div>
-                <p style="font-size: 0.875rem; font-weight: 500; color: #64748b;">Rata-rata Respon</p>
-                <p style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-top: 0.25rem;">&lt; 24<span style="font-size: 0.875rem; font-weight: 400; color: #64748b; margin-left: 0.25rem;">Jam</span></p>
-                <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem;">SLA</p>
+                <p style="font-size: 0.875rem; font-weight: 500; color: var(--slate-400);">Total Laporan</p>
+                <p style="font-size: 1.5rem; font-weight: 700; color: var(--slate-800); margin-top: 0.25rem;" x-text="stats.totalLaporan || 0">0</p>
+                <p style="font-size: 0.75rem; color: var(--slate-400); margin-top: 0.5rem;">Semenjak rilis</p>
             </div>
         </section>
 
         <!-- Layanan Cepat -->
         <section>
-            <h3 style="font-size: 1.125rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--slate-800); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #1e40af;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
                 Layanan Cepat
             </h3>
@@ -339,24 +323,24 @@
                     <div class="service-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     </div>
-                    <h4 style="font-weight: 700; color: #1e293b; font-size: 1.125rem; margin-bottom: 0.5rem;">Administrasi Kependudukan</h4>
-                    <p style="font-size: 0.875rem; color: #64748b;">Urus KTP, KK, Akta Kelahiran, dan domisili tanpa perlu antre panjang secara fisik.</p>
+                    <h4 style="font-weight: 700; color: var(--slate-800); font-size: 1.125rem; margin-bottom: 0.5rem;">Administrasi Kependudukan</h4>
+                    <p style="font-size: 0.875rem; color: var(--slate-500);">Urus KTP, KK, Akta Kelahiran, dan domisili tanpa perlu antre panjang secara fisik.</p>
                 </a>
 
                 <a href="/reports" class="service-card">
                     <div class="service-icon" style="background-color: rgba(234, 88, 12, 0.1); color: #ea580c;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     </div>
-                    <h4 style="font-weight: 700; color: #1e293b; font-size: 1.125rem; margin-bottom: 0.5rem;">Pengaduan Infrastruktur</h4>
-                    <p style="font-size: 0.875rem; color: #64748b;">Laporkan jalan rusak, lampu PJU mati, atau masalah fasilitas umum lainnya.</p>
+                    <h4 style="font-weight: 700; color: var(--slate-800); font-size: 1.125rem; margin-bottom: 0.5rem;">Pengaduan Infrastruktur</h4>
+                    <p style="font-size: 0.875rem; color: var(--slate-500);">Laporkan jalan rusak, lampu PJU mati, atau masalah fasilitas umum lainnya.</p>
                 </a>
             </div>
         </section>
 
-        <!-- Mading -->
+        <!-- Mading Section -->
         <section class="mading-section">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-                <h3 style="font-size: 1.125rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+                <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--slate-800); display: flex; align-items: center; gap: 0.5rem;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #3b82f6;"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                     Mading Terkini
                 </h3>
@@ -364,21 +348,42 @@
             </div>
 
             <div class="news-box">
-                <a href="/mading" class="news-item">
-                    <span class="badge-red">Penting</span>
-                    <h4 style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem;">Pemadaman Listrik Bergilir</h4>
-                    <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Akan dilakukan pemeliharaan gardu induk pada tanggal 20 Mei 2026 pukul 09:00 - 15:00 WIB di wilayah Sukajadi dan sekitarnya.</p>
-                    <p style="font-size: 0.625rem; color: #cbd5e1; font-weight: 500;">1 Hari yang lalu</p>
-                </a>
-                <a href="/mading" class="news-item">
-                    <span class="badge-blue">Info Warga</span>
-                    <h4 style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem;">Jadwal Vaksinasi Booster</h4>
-                    <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Tersedia kuota vaksinasi di Puskesmas kecamatan setiap hari Selasa dan Kamis.</p>
-                    <p style="font-size: 0.625rem; color: #cbd5e1; font-weight: 500;">3 Hari yang lalu</p>
-                </a>
+                <template x-for="item in madings.slice(0, 3)" :key="item.id">
+                    <a href="/mading" class="news-item">
+                        <span class="badge-status" :class="item.jenisInformasi === 'PENTING' ? 'badge-ditolak' : 'badge-diterima'" x-text="item.jenisInformasi">Info</span>
+                        <h4 style="font-weight: 600; color: var(--slate-800); margin-bottom: 0.25rem;" x-text="item.judul">Judul</h4>
+                        <p style="font-size: 0.875rem; color: var(--slate-500); margin-bottom: 0.5rem;" x-text="item.konten" class="line-clamp-2">Konten</p>
+                    </a>
+                </template>
+                <div x-show="madings.length === 0" class="text-center py-4" style="color: var(--slate-400);">Belum ada berita mading terkini</div>
             </div>
         </section>
     </div>
 </div>
+<th:block layout:fragment="script">
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('homeApp', () => ({
+                stats: {},
+                madings: [],
+                init() {
+                    this.loadData();
+                },
+                async loadData() {
+                    try {
+                        let resStats = await fetch('/api/dashboard/stats');
+                        let dataStats = await resStats.json();
+                        if (dataStats.success) this.stats = dataStats.data;
+
+                        let resMading = await fetch('/api/mading');
+                        this.madings = await resMading.json();
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+            }));
+        });
+    </script>
+</th:block>
 </body>
 </html>

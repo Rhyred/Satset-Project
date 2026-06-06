@@ -1,10 +1,9 @@
-    package com.kelompok4.satset.model;
+package com.kelompok4.satset.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,9 +29,19 @@ public class TiketLayanan extends BaseEntity {
     @Column(name = "waktu_pengajuan")
     private LocalDateTime waktuPengajuan;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", insertable = false, updatable = false)
     private Long userId;
 
-    @Column(name = "kategori_id")
+    @Column(name = "kategori_id", insertable = false, updatable = false)
     private Long kategoriId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "password"})
+    private User pemohon;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kategori_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private KategoriLayanan kategori;
 }
