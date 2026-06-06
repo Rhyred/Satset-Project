@@ -1,30 +1,33 @@
-/* ===== SATSET V4 — GovTech Design Tokens ===== */
+/* ===== SATSET — GovTech Design Tokens ===== */
 :root {
-  /* Primary - Royal Blue (Digital Public Trust) */
-  --primary: #0A52CC;
-  --primary-hover: #0842A8;
-  --primary-subtle: #E6F0FF;
+  /* Primary - civic blue */
+  --primary: #1d4ed8;
+  --primary-hover: #1e40af;
+  --primary-subtle: #dbeafe;
   --primary-text: #ffffff;
 
-  /* Accent - Accessible Red/Crimson */
-  --accent: #D32F2F;
-  --accent-hover: #C62828;
-  --accent-subtle: #FFEBEE;
+  /* Accent - SatSet orange from the brand mark */
+  --accent: #f97316;
+  --accent-hover: #ea580c;
+  --accent-subtle: #ffedd5;
 
   /* Surfaces */
+  --app-bg: #f4f7fb;
   --surface-0: #ffffff;
-  --surface-1: #F9FAFB;
-  --surface-2: #ffffff;
-  --surface-3: #F3F4F6;
+  --surface-1: #f8fafc;
+  --surface-2: #f1f5f9;
+  --surface-3: #e2e8f0;
+  --nav-bg: rgba(255, 255, 255, 0.92);
+  --header-bg: rgba(255, 255, 255, 0.9);
 
   /* Borders */
-  --border: #D1D5DB;
-  --border-hover: #9CA3AF;
+  --border: #d7dee8;
+  --border-hover: #94a3b8;
 
   /* Text - High Contrast */
-  --text-primary: #111827;
-  --text-secondary: #1F2937;
-  --text-tertiary: #4B5563;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
   --text-inverse: #ffffff;
 
   /* Status / Semantic Colors */
@@ -38,15 +41,15 @@
   --info-subtle: #E1EFFE;
 
   /* Shadows - Flatter, more structured */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 12px 24px -18px rgba(15, 23, 42, 0.35);
+  --shadow-lg: 0 24px 52px -32px rgba(15, 23, 42, 0.45);
 
   /* Radius - Professional, not too bubbly */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
-  --radius-xl: 12px;
+  --radius-xl: 8px;
   --radius-full: 9999px;
 
   /* Motion (Functional transitions) */
@@ -61,32 +64,34 @@
   --nav-collapsed: 72px;
   --header-height: 64px;
   --bottom-nav-height: 72px;
+  --touch-target: 40px;
 }
 
 /* ===== Dark Mode - Accessible & Readable ===== */
 .dark {
-  /* Lighter blue for dark mode visibility */
-  --primary: #3B82F6;
-  --primary-hover: #60A5FA;
+  --primary: #60a5fa;
+  --primary-hover: #93c5fd;
   --primary-subtle: rgba(59, 130, 246, 0.15);
 
-  --accent: #F87171;
-  --accent-hover: #FCA5A5;
-  --accent-subtle: rgba(248, 113, 113, 0.15);
+  --accent: #fb923c;
+  --accent-hover: #fdba74;
+  --accent-subtle: rgba(251, 146, 60, 0.16);
 
-  /* Solid dark grays, not glassmorphism */
+  --app-bg: #0b1120;
   --surface-0: #111827;
-  --surface-1: #1F2937;
-  --surface-2: #374151;
-  --surface-3: #4B5563;
+  --surface-1: #172033;
+  --surface-2: #1f2937;
+  --surface-3: #334155;
+  --nav-bg: rgba(15, 23, 42, 0.94);
+  --header-bg: rgba(15, 23, 42, 0.9);
 
-  --border: #4B5563;
-  --border-hover: #6B7280;
+  --border: #334155;
+  --border-hover: #64748b;
 
   /* Text - Pure white for max contrast */
   --text-primary: #F9FAFB;
   --text-secondary: #E5E7EB;
-  --text-tertiary: #D1D5DB;
+  --text-tertiary: #cbd5e1;
 
   --success: #31C48D;
   --success-subtle: rgba(49, 196, 141, 0.15);
@@ -97,7 +102,7 @@
   --info: #60A5FA;
   --info-subtle: rgba(96, 165, 250, 0.15);
 
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.6);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.7);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.42);
+  --shadow-md: 0 16px 30px -20px rgba(0, 0, 0, 0.8);
+  --shadow-lg: 0 28px 64px -34px rgba(0, 0, 0, 0.92);
 }

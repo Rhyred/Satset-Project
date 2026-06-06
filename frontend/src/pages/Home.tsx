@@ -9,8 +9,7 @@ import {
   Info,
   Clock
 } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Mading, Laporan, TiketLayanan, Notifikasi, ActivityItem, NextAction, TimelineEvent } from '../types';
+import type { Mading, Laporan, TiketLayanan, Notifikasi, ActivityItem, NextAction, TimelineEvent } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { NextActionCard } from '../components/NextActionCard';
 import { ServiceTimeline } from '../components/ServiceTimeline';
@@ -20,7 +19,6 @@ export const Home: React.FC = () => {
   const [madings, setMadings] = useState<Mading[]>([]);
   const [myLaporans, setMyLaporans] = useState<Laporan[]>([]);
   const [myAntreans, setMyAntreans] = useState<TiketLayanan[]>([]);
-  const [myNotifikasis, setMyNotifikasis] = useState<Notifikasi[]>([]);
   const [activityFeed, setActivityFeed] = useState<ActivityItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -55,31 +53,30 @@ export const Home: React.FC = () => {
           setMyAntreans(activeAntreans);
         }
         if (Array.isArray(notifData)) {
-          setMyNotifikasis(notifData.slice(0, 3));
           setUnreadCount(notifData.filter((n: Notifikasi) => !n.isRead).length);
         }
 
         // Priority 2: Unified Activity Feed
-        const combinedActivities = [
-          ...((Array.isArray(laporanData) ? laporanData : []).filter(l => l.userId === user.id).map(l => ({ 
-            id: `l-${l.id}`, type: 'laporan', 
+        const combinedActivities: ActivityItem[] = [
+          ...((Array.isArray(laporanData) ? laporanData : []).filter((l: Laporan) => l.userId === user.id).map((l: Laporan) => ({ 
+            id: `l-${l.id}`, type: 'laporan' as const, 
             title: 'Pembaruan Laporan', 
             desc: `Status laporan "${l.judulLaporan}" kini: ${l.statusLaporan}`, 
-            date: l.updatedAt || l.createdAt, 
+            date: l.updatedAt || l.createdAt || '', 
             isUnread: false, link: '/reports' 
           }))),
-          ...((Array.isArray(antreanData) ? antreanData : []).filter(a => a.userId === user.id).map(a => ({ 
-            id: `a-${a.id}`, type: 'antrean', 
+          ...((Array.isArray(antreanData) ? antreanData : []).filter((a: TiketLayanan) => a.userId === user.id).map((a: TiketLayanan) => ({ 
+            id: `a-${a.id}`, type: 'antrean' as const, 
             title: 'Pembaruan Antrean', 
             desc: `Antrean ${a.nomorAntrian} untuk ${a.jenisSurat} kini: ${a.statusAntrian}`, 
-            date: a.updatedAt || a.waktuPengajuan, 
+            date: a.updatedAt || a.waktuPengajuan || '', 
             isUnread: false, link: '/queue' 
           }))),
-          ...((Array.isArray(notifData) ? notifData : []).map(n => ({ 
-            id: `n-${n.id}`, type: 'notif', 
+          ...((Array.isArray(notifData) ? notifData : []).map((n: Notifikasi) => ({ 
+            id: `n-${n.id}`, type: 'notifikasi' as const, 
             title: n.judul || 'Pemberitahuan Sistem', 
             desc: n.pesan, 
-            date: n.createdAt, 
+            date: n.createdAt || '', 
             isUnread: !n.isRead, 
             link: n.pesan.toLowerCase().includes('laporan') ? '/reports' : (n.pesan.toLowerCase().includes('antrean') ? '/queue' : '/notifikasi') 
           })))
@@ -100,19 +97,6 @@ export const Home: React.FC = () => {
   if (hour >= 12 && hour < 15) greeting = 'Selamat siang';
   else if (hour >= 15 && hour < 18) greeting = 'Selamat sore';
   else if (hour >= 18 || hour < 4) greeting = 'Selamat malam';
-
-  const getLaporanBadge = (status: string) => {
-    if (status === 'DITERIMA') return 'badge-info';
-    if (status === 'DIPROSES') return 'badge-warning';
-    return 'badge-neutral';
-  };
-
-  const getAntreanBadge = (status: string) => {
-    if (status === 'MENUNGGU') return 'badge-warning';
-    if (status === 'DIPANGGIL') return 'badge-primary';
-    if (status === 'DILAYANI') return 'badge-info';
-    return 'badge-neutral';
-  };
 
   const [showWelcome, setShowWelcome] = useState(
     user ? localStorage.getItem('satset_welcomed_' + user.id) !== 'true' : false

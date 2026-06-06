@@ -67,7 +67,7 @@ export const Register: React.FC = () => {
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
               </svg>
             </div>
-            <span style={{ fontSize: '1.125rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>SatSet</span>
+            <span style={{ fontSize: '1.125rem', fontWeight: 700, letterSpacing: 0, color: 'var(--text-primary)' }}>SatSet</span>
           </div>
 
           <h2 className="auth-title" style={{ textAlign: 'center' }}>Daftar Akun</h2>

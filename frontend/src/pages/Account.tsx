@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
-import { Edit3, User, Mail, Phone, MapPin, Hash, CheckCircle, Clock } from 'lucide-react';
-import { Laporan, TiketLayanan } from '../types';
+import { CheckCircle, Clock } from 'lucide-react';
+import type { Laporan, TiketLayanan } from '../types';
 import { EmptyState } from '../components/EmptyState';
 
 interface HistoryItem {
@@ -15,7 +14,6 @@ interface HistoryItem {
 
 export const Account: React.FC = () => {
   const { user } = useAuth();
-  const { showToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<'profil' | 'riwayat' | 'keamanan'>('profil');
   const [history, setHistory] = useState<HistoryItem[]>([]);
@@ -44,12 +42,12 @@ export const Account: React.FC = () => {
           if (Array.isArray(rData)) reports = rData.filter(r => r.userId === user.id);
         }
 
-        const combined = [
+        const combined: HistoryItem[] = [
           ...queues.map(q => ({ 
-            id: `q-${q.id}`, type: 'antrean', title: q.jenisSurat, status: q.statusAntrian, date: q.createdAt || q.waktuPengajuan 
+            id: `q-${q.id}`, type: 'antrean' as const, title: q.jenisSurat, status: q.statusAntrian, date: q.createdAt || q.waktuPengajuan
           })),
           ...reports.map(r => ({ 
-            id: `r-${r.id}`, type: 'laporan', title: r.judulLaporan, status: r.statusLaporan, date: r.createdAt 
+            id: `r-${r.id}`, type: 'laporan' as const, title: r.judulLaporan, status: r.statusLaporan, date: r.createdAt
           }))
         ];
 
@@ -184,7 +182,7 @@ export const Account: React.FC = () => {
             </div>
           ) : (
             <div className="timeline">
-              {history.map((item, idx) => (
+              {history.map((item) => (
                 <div key={item.id} className="timeline-item pb-6">
                   <div className="timeline-dot" style={{ 
                     background: item.type === 'antrean' ? 'var(--info)' : 'var(--warning)',

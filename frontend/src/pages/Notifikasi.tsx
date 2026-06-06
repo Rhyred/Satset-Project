@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Bell, Check, Trash2, CheckCircle2, Info, AlertTriangle, MessageSquare, ArrowRight } from 'lucide-react';
-import { Notifikasi as NotifikasiType } from '../types';
+import { Bell, Trash2, CheckCircle2, Info, AlertTriangle, MessageSquare, ArrowRight } from 'lucide-react';
+import type { Notifikasi as NotifikasiType } from '../types';
 import { EmptyState } from '../components/EmptyState';
 import { Link } from 'react-router-dom';
 

@@ -43,13 +43,13 @@ export const Login: React.FC = () => {
                 </svg>
               </div>
               <div>
-                <div style={{ fontSize: '1.125rem', fontWeight: 700, letterSpacing: '-0.02em' }}>SatSet</div>
-                <div style={{ fontSize: '0.5625rem', textTransform: 'uppercase' as const, letterSpacing: '0.1em', opacity: 0.6 }}>Super App</div>
+                <div style={{ fontSize: '1.125rem', fontWeight: 700, letterSpacing: 0 }}>SatSet</div>
+                <div style={{ fontSize: '0.5625rem', textTransform: 'uppercase' as const, letterSpacing: 0, opacity: 0.6 }}>Super App</div>
               </div>
             </div>
           </div>
 
-          <h1 style={{ fontSize: '2.25rem', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.03em', marginBottom: '1rem', color: '#fff' }}>
+          <h1 style={{ fontSize: '2.25rem', fontWeight: 700, lineHeight: 1.15, letterSpacing: 0, marginBottom: '1rem', color: '#fff' }}>
             Layanan publik<br />
             <span style={{ color: '#a5b4fc' }}>cepat & transparan.</span>
           </h1>

@@ -4,7 +4,7 @@ import {
   CheckCircle2, Clock, AlertCircle, FilePlus, ShieldCheck,
   UserCheck, Wrench, MapPin, Flag, UserCircle2
 } from 'lucide-react';
-import { TimelineEvent } from '../types';
+import type { TimelineEvent } from '../types';
 
 // ──────────────────────────────────────────────
 // Per-status visual config

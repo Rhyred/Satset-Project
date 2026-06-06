@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { 
   Users, FileText, ClipboardList, Megaphone, 
-  X, Trash2, Edit3, Plus, Activity, Search
+  X, Trash2, Edit3, Plus, Activity
 } from 'lucide-react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
-import { Laporan, TiketLayanan, Mading, User } from '../types';
+import type { Laporan, TiketLayanan, Mading, User } from '../types';
 import { motion } from 'framer-motion';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
@@ -26,7 +25,6 @@ interface AdminStats {
 }
 
 export const AdminDashboard: React.FC = () => {
-  const { user } = useAuth();
   const { showToast } = useToast();
 
   const [stats, setStats] = useState<AdminStats>({
@@ -468,7 +466,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
               <div className="form-group">
                 <label className="form-label">Kategori</label>
-                <select className="select" value={madingForm.jenisInformasi} onChange={e => setMadingForm({...madingForm, jenisInformasi: e.target.value as any})}>
+                <select className="select" value={madingForm.jenisInformasi} onChange={e => setMadingForm({...madingForm, jenisInformasi: e.target.value as Mading['jenisInformasi']})}>
                   <option value="PENTING">Penting</option><option value="INFO_WARGA">Info Warga</option><option value="PENGUMUMAN">Pengumuman</option>
                 </select>
               </div>
@@ -506,7 +504,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
               <div className="grid grid-2 gap-4">
                 <div className="form-group"><label className="form-label">Password {userForm.id && '(Isi untuk ubah)'}</label><input type="password" className="input" value={userForm.password} onChange={e => setUserForm({...userForm, password: e.target.value})} required={!userForm.id} /></div>
-                <div className="form-group"><label className="form-label">Role</label><select className="select" value={userForm.role} onChange={e => setUserForm({...userForm, role: e.target.value as any})}><option value="USER">User (Warga)</option><option value="ADMIN">Admin</option></select></div>
+                <div className="form-group"><label className="form-label">Role</label><select className="select" value={userForm.role} onChange={e => setUserForm({...userForm, role: e.target.value as User['role']})}><option value="USER">User (Warga)</option><option value="ADMIN">Admin</option></select></div>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-ghost" onClick={() => setShowUserModal(false)}>Batal</button>

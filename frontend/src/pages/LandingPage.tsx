@@ -169,7 +169,7 @@ export const LandingPage: React.FC = () => {
             </div>
             <div>
               <div className="text-lg font-bold text-primary-color">SatSet</div>
-              <div className="text-xs uppercase text-tertiary" style={{ letterSpacing: '0.12em' }}>Super App</div>
+              <div className="text-xs uppercase text-tertiary" style={{ letterSpacing: 0 }}>Super App</div>
             </div>
           </div>
 
@@ -218,6 +218,9 @@ export const LandingPage: React.FC = () => {
           </div>
 
           <div className="landing-hero-panel card">
+            <div className="landing-panel-visual" aria-hidden="true">
+              <img src="/logo_satset.png" alt="" />
+            </div>
             <div className="landing-panel-header">
               <span className="badge badge-info">Visualisasi Layanan</span>
               <span className="badge badge-success">Terpercaya</span>

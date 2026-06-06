@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { ClipboardList, ArrowRight, Printer, CheckCircle, Clock, Search, Users, MapPin } from 'lucide-react';
-import { TiketLayanan } from '../types';
+import { ClipboardList, ArrowRight, Printer, CheckCircle, Clock } from 'lucide-react';
+import type { TiketLayanan } from '../types';
 import { EmptyState } from '../components/EmptyState';
 import { QueueProgressCard } from '../components/QueueProgressCard';
 
@@ -133,7 +133,6 @@ export const Queue: React.FC = () => {
               // Mock real-time queue data for UI Demonstration
               const isWaiting = q.statusAntrian === 'MENUNGGU';
               const peopleAhead = isWaiting ? 3 : 0;
-              const waitTime = isWaiting ? '15 Menit' : 'Sekarang';
               const counter = 'Loket 3';
               
               // Parse mock number (e.g. B-012)

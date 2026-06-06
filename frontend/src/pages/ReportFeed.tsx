@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { FileText, Plus, X, MessageSquare, Search, AlertCircle, Activity, Printer } from 'lucide-react';
-import { Laporan, KategoriLayanan, TindakLanjutLaporan, TimelineEvent } from '../types';
+import type { Laporan, KategoriLayanan, TindakLanjutLaporan, TimelineEvent } from '../types';
 import { EmptyState } from '../components/EmptyState';
 import { ServiceTimeline } from '../components/ServiceTimeline';
 
@@ -270,7 +270,7 @@ export const ReportFeed: React.FC = () => {
               />
             </div>
           ) : (
-            displayList.map((laporan, index) => {
+            displayList.map((laporan) => {
               const isSelf = laporan.userId === user?.id;
               const reporterName = isSelf ? 'Anda' : (laporan.pelapor?.namaLengkap || 'Warga Anonim');
               const avatarText = isSelf ? 'A' : reporterName.substring(0, 1).toUpperCase();

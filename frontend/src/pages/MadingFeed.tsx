@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Megaphone, Info, AlertCircle, FileText } from 'lucide-react';
-import { Mading } from '../types';
+import { Search, Megaphone } from 'lucide-react';
+import type { Mading } from '../types';
 import { EmptyState } from '../components/EmptyState';
 
 export const MadingFeed: React.FC = () => {
@@ -32,14 +32,6 @@ export const MadingFeed: React.FC = () => {
     return new Date(dateStr).toLocaleDateString('id-ID', {
       day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
     });
-  };
-
-  const getCategoryIcon = (jenis: string) => {
-    switch (jenis) {
-      case 'PENTING': return <AlertCircle size={14} />;
-      case 'INFO_WARGA': return <Info size={14} />;
-      default: return <FileText size={14} />;
-    }
   };
 
   const getCategoryClass = (jenis: string) => {

@@ -1,19 +1,5 @@
 {
   "name": "satset-project",
-  "version": "1.2.0",
-  "description": "Sistem Administrasi Terpadu & Sentralisasi Elektronik",
-  "main": "index.js",
-  "scripts": {
-    "dev": "node run-mvnw.js spring-boot:run",
-    "build": "node run-mvnw.js clean compile"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
-}
-
-{
-  "name": "satset-project",
   "version": "1.0.0",
   "description": "Sistem Administrasi Terpadu & Sentralisasi Elektronik",
   "main": "index.js",

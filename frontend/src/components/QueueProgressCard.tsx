@@ -25,7 +25,7 @@ export const QueueProgressCard: React.FC<QueueProgressProps> = ({
       <div className="flex flex-col md:flex-row gap-6 mb-8 items-center justify-between">
         <div className="text-center md:text-left flex-1">
           <p className="text-xs font-bold text-tertiary uppercase tracking-wider mb-2">Nomor Anda</p>
-          <div className="text-5xl font-black text-primary-color tabular-nums tracking-tighter" style={{ letterSpacing: '-0.05em' }}>
+          <div className="text-5xl font-black text-primary-color tabular-nums tracking-tighter" style={{ letterSpacing: 0 }}>
             {myNumber}
           </div>
         </div>
@@ -70,7 +70,7 @@ export const QueueProgressCard: React.FC<QueueProgressProps> = ({
         <div className="flex flex-col items-center justify-center p-3 text-center border-l border-r" style={{ borderColor: 'var(--border)' }}>
           <Users size={16} className="text-tertiary mb-2" />
           <p className="text-[10px] font-bold text-tertiary uppercase tracking-wider mb-1">Sisa</p>
-          <p className="text-sm font-bold text-primary-color tabular-nums">{remainingPeople} Orang</p>
+          <p className="text-sm font-bold text-primary-color tabular-nums">{remainingPeople}/{totalWaiting} Orang</p>
         </div>
         <div className="flex flex-col items-center justify-center p-3 text-center">
           <Monitor size={16} className="text-tertiary mb-2" />

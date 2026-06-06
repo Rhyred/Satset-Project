@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, User, Settings, LogOut, Sun, Moon, Command } from 'lucide-react';
+import { Search, User, LogOut, Sun, Moon, Command } from 'lucide-react';
 
 interface LayoutProps {
   title?: string;
