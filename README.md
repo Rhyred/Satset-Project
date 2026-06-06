@@ -3,239 +3,227 @@
 # 🏛️ SATSET
 ### Sistem Administrasi Terpadu & Sentralisasi Elektronik
 
-**Platform GovTech modern untuk transparansi dan kemudahan akses layanan publik digital.**
+**Platform digital hybrid untuk layanan warga dan manajemen admin dengan antrean elektronik, pelaporan masyarakat, notifikasi, dashboard kinerja, dan mading digital.**
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)](https://www.typescriptlang.org)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql)](https://www.postgresql.org)
 
 </div>
 
 ---
 
-## 📌 Deskripsi Project
+## 📌 Deskripsi Proyek
 
-**SATSET** hadir untuk menjawab permasalahan umum dalam layanan administrasi publik:
+**SATSET** adalah aplikasi manajemen layanan publik yang menggabungkan:
+- Pelaporan masyarakat terpusat (E-Report)
+- Antrean digital untuk layanan instansi
+- Notifikasi status dan update
+- Mading pengumuman resmi
+- Dashboard admin untuk monitoring kinerja layanan
 
-| Masalah | Solusi SATSET |
-|---|---|
-| Warga tidak tahu status laporannya | Service Timeline 7-langkah real-time |
-| Antrean fisik panjang dan tidak pasti | Antrean Digital dengan estimasi waktu |
-| Tidak ada panduan tindakan untuk warga | Smart Citizen Guidance (NextActionCard) |
-| Pengumuman instansi tidak terpusat | Mading Digital resmi |
-| Admin sulit memantau kinerja layanan | Dashboard SLA & metrik terpadu |
+Proyek ini dibangun sebagai aplikasi full-stack:
+- **Frontend**: React + TypeScript + Vite
+- **Backend**: Java Spring Boot
+- **Database**: PostgreSQL
 
 ---
 
 ## ✨ Fitur Utama
 
-### 👤 Sisi Warga
-- **📋 Pengaduan Masyarakat (E-Report)** — Pelaporan infrastruktur, fasilitas umum, dengan pelacakan status transparan
-- **🎟️ Antrean Digital (E-Queue)** — Tiket digital dengan progress bar real-time dan estimasi waktu
-- **🧭 Smart Citizen Guidance** — Kartu panduan dinamis yang secara otomatis memberi tahu langkah selanjutnya
-- **🔔 Notifikasi Terpadu** — Pemberitahuan pembaruan status laporan & antrean
-- **📰 Mading Digital** — Papan pengumuman resmi instansi
-- **🖨️ Cetak Dokumen** — Bukti laporan & tiket antrean siap cetak (PDF)
+### 👤 Warga
+- Sistem pelaporan masyarakat dengan pembuatan dan pelacakan status laporan
+- Antrean digital dengan nomor antrean dan progress
+- Notifikasi pembaruan laporan, antrean, dan pengumuman
+- Mading digital untuk pengumuman instansi
+- Dashboard ringkas untuk melihat status layanan
 
-### 🔧 Sisi Admin
-- **📊 Dashboard Kinerja** — Grafik distribusi status laporan & antrean (Chart.js)
-- **⏱️ Metrik SLA** — Rata-rata waktu penyelesaian, tingkat keberhasilan, laporan aktif
-- **📝 Manajemen Laporan** — Verifikasi, penugasan, dan tindak lanjut laporan warga
-- **📣 Manajemen Mading** — Penerbitan dan pengelolaan pengumuman resmi
+### 🔧 Admin
+- Dashboard kinerja untuk memantau jumlah laporan, antrean, dan metrik lainnya
+- Manajemen laporan: verifikasi, penugasan, dan update status
+- Pengelolaan mading/pengumuman resmi
+- Visualisasi data menggunakan grafik
 
 ---
 
-## 🛠️ Teknologi
+## 🛠️ Stack Teknologi
 
 | Layer | Teknologi |
 |---|---|
-| **Frontend** | React 18, TypeScript 5, Vite, Framer Motion, Lucide Icons |
-| **Styling** | Vanilla CSS (Design System dengan CSS Variables), Mobile-First |
-| **State** | React Context API (AuthContext, ToastContext) |
-| **Charts** | Chart.js + react-chartjs-2 |
-| **Backend** | Java 17, Spring Boot 3, Spring Security, JWT Authentication |
-| **ORM** | Hibernate / Spring Data JPA |
-| **Database** | PostgreSQL 15 |
-| **Build Tools** | Maven (Backend), Vite (Frontend) |
+| Frontend | React 18, TypeScript 5, Vite, Tailwind CSS, Framer Motion |
+| State | React Context API (`AuthContext`, `ToastContext`) |
+| Visualisasi | Chart.js, react-chartjs-2 |
+| Backend | Java 17, Spring Boot 3.2.5, Spring Web, Spring Data JPA, Thymeleaf |
+| Database | PostgreSQL 15 |
+| Build | Maven, Vite |
 
 ---
 
-## 🏗️ Arsitektur Sistem
-
-```
-┌─────────────────────────────┐
-│  Browser (React + TS + Vite)│
-│  Port: 5173 (dev)           │
-└────────────┬────────────────┘
-             │ HTTP REST (JSON)
-             │ /api/**  →  Vite Proxy
-             ▼
-┌─────────────────────────────┐
-│  Spring Boot Application    │
-│  Port: 8080                 │
-│  Spring Security + JWT      │
-└────────────┬────────────────┘
-             │ Hibernate / JPA
-             ▼
-┌─────────────────────────────┐
-│  PostgreSQL 15              │
-│  Database: satset_db        │
-└─────────────────────────────┘
-```
-
----
-
-## 📂 Struktur Folder
+## 📁 Struktur Proyek
 
 ```text
-satset-project/
+Satset-Project/
 ├── README.md
-│
-├── frontend/                          # React + TypeScript App
-│   ├── src/
-│   │   ├── components/                # Reusable UI Components
-│   │   │   ├── ServiceTimeline.tsx    # 7-step visual tracker
-│   │   │   ├── NextActionCard.tsx     # Smart citizen guidance card
-│   │   │   ├── QueueProgressCard.tsx  # Live queue progress bar
-│   │   │   └── EmptyState.tsx
-│   │   ├── context/
-│   │   │   ├── AuthContext.tsx        # Global authentication state
-│   │   │   └── ToastContext.tsx       # Notification toast system
-│   │   ├── pages/
-│   │   │   ├── Home.tsx              # Citizen Command Center
-│   │   │   ├── ReportFeed.tsx        # Laporan & Pengaduan
-│   │   │   ├── Queue.tsx             # Antrean Digital
-│   │   │   ├── Notifications.tsx     # Notifikasi
-│   │   │   ├── Mading.tsx            # Mading Digital
-│   │   │   ├── Account.tsx           # Profil Warga
-│   │   │   ├── AdminDashboard.tsx    # Dashboard Admin
-│   │   │   ├── Login.tsx
-│   │   │   └── Register.tsx
-│   │   ├── styles/
-│   │   │   ├── tokens.css            # Design system (CSS Variables)
-│   │   │   ├── base.css              # Reset & typography
-│   │   │   ├── components.css        # Reusable class utilities
-│   │   │   ├── layout.css            # Page layout & grid
-│   │   │   └── print.css             # Print / PDF styles
-│   │   └── types/
-│   │       └── index.ts              # Strict TypeScript interfaces
+├── package.json           # Root npm scripts untuk dev dan build
+├── pom.xml                # Maven Spring Boot project
+├── mvnw, mvnw.cmd         # Maven wrapper
+├── run-mvnw.js            # Helper menjalankan Maven dari script npm root
+├── frontend/              # React + TypeScript aplikasi
+│   ├── package.json
+│   ├── tsconfig.json
 │   ├── vite.config.ts
-│   └── package.json
-│
-└── backend/                           # Spring Boot Application
-    └── src/main/java/.../satset/
-        ├── controllers/               # REST API Endpoints
-        ├── models/                    # JPA Entity classes
-        ├── repositories/             # Spring Data JPA repositories
-        ├── services/                 # Business logic layer
-        ├── dto/                      # Request/Response DTOs
-        └── security/                 # JWT filter, auth config
+│   └── src/
+│       ├── components/    # Reusable UI component
+│       ├── context/       # AuthContext, ToastContext
+│       ├── hooks/         # Hook custom
+│       ├── layouts/       # Layout halaman
+│       ├── pages/         # Halaman aplikasi
+│       ├── routes/        # Routing dan proteksi halaman
+│       ├── services/      # API service wrapper
+│       ├── styles/        # CSS design system
+│       ├── types/         # TypeScript interface/tipe
+│       └── utils/         # Utility helper
+└── src/main/              # Spring Boot backend
+    ├── java/              # Sumber kode backend
+    │   └── com/
+    └── resources/         # Konfigurasi, template, static assets
 ```
 
 ---
 
-## 🚀 Cara Menjalankan
+## 🚀 Persiapan dan Jalankan
 
 ### Prasyarat
 - Node.js v18+
 - Java JDK 17+
-- PostgreSQL 15+ (running di `localhost:5432`)
-- Maven 3.8+
+- PostgreSQL 15+
+- Maven (opsional, karena wrapper tersedia)
 
 ### 1. Setup Database
+
+Buat database PostgreSQL:
+
 ```sql
--- Jalankan di PostgreSQL client (psql / DBeaver / pgAdmin)
 CREATE DATABASE satset_db;
 ```
-> Spring Boot akan otomatis membuat skema tabel via Hibernate DDL auto.
 
 ### 2. Konfigurasi Backend
-Edit `backend/src/main/resources/application.properties`:
+
+Edit `src/main/resources/application.properties` jika diperlukan:
+
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/satset_db
-spring.datasource.username=YOUR_DB_USER
-spring.datasource.password=YOUR_DB_PASSWORD
+spring.datasource.url=jdbc:postgresql://127.0.0.1:5432/satset_db
+spring.datasource.username=postgres
+spring.datasource.password=123159
 ```
 
-### 3. Jalankan Backend
-```bash
-cd backend
-mvn spring-boot:run
-# Backend berjalan di http://localhost:8080
-```
+### 3. Install Dependensi Frontend
 
-### 4. Jalankan Frontend
 ```bash
 cd frontend
 npm install
-npm run dev
-# Frontend berjalan di http://localhost:5173
 ```
-> Semua request `/api/**` secara otomatis di-proxy ke backend melalui konfigurasi Vite.
+
+### 4. Jalankan Backend
+
+Dari direktori root:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Atau jika menggunakan Windows PowerShell:
+
+```powershell
+./mvnw.cmd spring-boot:run
+```
+
+Alternatif menggunakan script npm root:
+
+```bash
+npm run dev:backend
+```
+
+Backend tersedia di `http://localhost:8080`.
+
+### 5. Jalankan Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+Frontend tersedia di `http://localhost:5173`.
+
+> Jika `concurrently` terpasang, root script `npm run dev` dapat menjalankan backend dan frontend bersamaan.
 
 ---
 
-## 📡 API Endpoint Utama
+## 📦 Skrip Penting
 
-### Auth
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| `POST` | `/api/auth/login` | Login warga / admin |
-| `POST` | `/api/auth/register` | Pendaftaran warga baru |
-
-### Laporan & Pengaduan
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| `GET` | `/api/laporan` | Daftar semua laporan |
-| `POST` | `/api/laporan` | Buat laporan baru |
-| `PUT` | `/api/laporan/{id}/status` | Update status laporan (Admin) |
-| `POST` | `/api/laporan/{id}/tindak-lanjut` | Tambah tanggapan petugas (Admin) |
-
-### Antrean Digital
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| `GET` | `/api/antrean` | Daftar antrean |
-| `POST` | `/api/antrean` | Ambil nomor antrean baru |
-| `PUT` | `/api/antrean/{id}/status` | Update status antrean (Admin) |
-
-### Notifikasi
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| `GET` | `/api/notifikasi/my` | Notifikasi milik pengguna yang login |
-| `PUT` | `/api/notifikasi/{id}/read` | Tandai notifikasi sudah dibaca |
-
-### Mading Digital
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| `GET` | `/api/mading` | Daftar mading yang dipublikasikan |
-| `POST` | `/api/mading` | Buat mading baru (Admin) |
-| `DELETE` | `/api/mading/{id}` | Hapus mading (Admin) |
+| Perintah | Deskripsi |
+|---|---|
+| `npm run dev:frontend` | Jalankan frontend React |
+| `npm run dev:backend` | Jalankan backend Spring Boot |
+| `npm run build:frontend` | Build frontend production |
+| `npm run build:backend` | Build backend Maven tanpa test |
+| `npm run build` | Build frontend lalu backend |
+| `npm run lint` (frontend) | Periksa kode React/TypeScript |
 
 ---
 
-## 📊 Evaluasi Produk
+## 📌 Konfigurasi Backend yang Digunakan
 
-| Aspek | Skor | Catatan |
-|-------|------|---------|
-| Arsitektur | ⭐⭐⭐⭐½ | Client-Server separation jelas, REST API terstandar |
-| Kualitas UX | ⭐⭐⭐⭐⭐ | Smart Guidance, Service Timeline, animasi GovTech-grade |
-| Kualitas Frontend | ⭐⭐⭐⭐½ | TypeScript strict, Design System konsisten |
-| Kualitas Backend | ⭐⭐⭐⭐ | Spring Security + JWT sudah solid |
-| Kesiapan Portofolio | ⭐⭐⭐⭐⭐ | Siap GitHub, Presentasi Dosen, Interview |
+Lokasi: `src/main/resources/application.properties`
 
----
+Pengaturan koneksi database default saat ini:
 
-## 👥 Kontributor
-
-Dikembangkan sebagai **Capstone Project** Mata Kuliah Pemrograman Berorientasi Objek.
-
-**Tim Pengembang SATSET**
+```properties
+server.port=8080
+spring.datasource.url=jdbc:postgresql://127.0.0.1:5432/satset_db
+spring.datasource.username=postgres
+spring.datasource.password=123159
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+```
 
 ---
 
-<div align="center">
-  <em>"Pelayanan Publik yang Cepat, Tepat, dan Transparan."</em>
-  <br/><br/>
-  <strong>SATSET © 2024 – Platform GovTech untuk Warga Indonesia</strong>
-</div>
+## 📡 API dan Routing Umum
+
+Backend menyediakan endpoint REST, sedangkan frontend menggunakan React dan routing client-side.
+
+Contoh endpoint yang umum digunakan:
+- `POST /api/auth/login`
+- `POST /api/auth/register`
+- `GET /api/laporan`
+- `POST /api/laporan`
+- `PUT /api/laporan/{id}/status`
+- `GET /api/antrean`
+- `POST /api/antrean`
+
+---
+
+## 🧩 Catatan Pengembangan
+
+- `frontend/src/context/` berisi context untuk autentikasi dan toast.
+- `frontend/src/services/` mengelola panggilan API ke backend.
+- `frontend/src/pages/` menampung halaman utama seperti `Home`, `Queue`, `ReportFeed`, `AdminDashboard`, `Notifications`, dan `Account`.
+- `spring.jpa.hibernate.ddl-auto=update` memudahkan sinkronisasi model ke database saat pengembangan tetapi tidak direkomendasikan di produksi.
+
+---
+
+## 📌 Referensi Struktur Frontend
+
+- `frontend/src/pages/` — halaman aplikasi utama
+- `frontend/src/components/` — komponen UI reusable
+- `frontend/src/routes/` — proteksi route dan router utama
+- `frontend/src/styles/` — token, layout, komponen, dan print style
+- `frontend/src/types/` — tipe TypeScript
+
+---
+
+## 📌 Lisensi
+Proyek mengikuti lisensi yang ditentukan di file `LICENSE`.
